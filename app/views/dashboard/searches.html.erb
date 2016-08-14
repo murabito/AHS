@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <title>Elemrex</title>
+    <meta charset="UTF-8" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="shared.css" />
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="dashboard.css" />
+    <link rel="stylesheet" href="patient-detail.css" />
+  </head>
+  <body>
+    <div id="sidebar">
+      <header>
+        <img src="images/logo.png">
+        user@ahs-cloud.com
+      </header>
+      <nav>
+        <ul>
+          <li><a href="#">Clinical Dashboard</a></li>
+          <li><a href="#">Patient Search</a></li>
+          <li><a href="#">Saved</a></li>
+          <li><a href="#">Recent</a></li>
+          <li><a href="#">Preferences</a></li>
+          <li><a href="#">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <header>
+      <h1 class="company-name">ELEMREX&trade; Clinical Dashboard Demonstrator</h1>
+    </header>
+
+    <main id="dashboard">
+      <div class="column">
+        <section id="search-section">
+          <div class="patient-search-container">
+            <img src="images/img_nyu.png">
+            <p>Current Status: Green - Real-Time Updates</p>
+            <footer>
+              <a href="#">Patient Search</a>
+            </footer>
+          </div>
+
+          <div class="patient-search-container">
+            <img src="images/img_princeton.png">
+            <p>Current Status: Green - Real-Time Updates</p>
+            <footer>
+              <a href="#">Patient Search</a>
+            </footer>
+          </div>
+
+          <div class="patient-search-container">
+            <img src="images/img_stanford.png">
+            <p>Current Status: Green - Real-Time Updates</p>
+            <footer>
+              <a href="#">Patient Search</a>
+            </footer>
+          </div>
+          
+        </section>
+
+        <section class="table-container">
+          <h2>Saved Patient Searches</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <td><input type="checkbox" name=""></td>
+                <td>Chart ID</td>
+                <td>Last Name</td>
+                <td>First Name</td>
+                <td>EHR Source</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox" name=""></td>
+                <td><a href="#">0823338598E5</a></td>
+                <td>Howell</td>
+                <td>Aileen</td>
+                <td>NYU Langone Medical Center</td>
+              </tr>
+
+              <tr>
+                <td><input type="checkbox" name=""></td>
+                <td><a href="#">3F11A7AA165A</a></td>
+                <td>Hester</td>
+                <td>Marisa</td>
+                <td>NYU Langone Medical Center</td>
+              </tr>
+
+              <tr>
+                <td><input type="checkbox" name=""></td>
+                <td><a href="#">A1E33523D470</a></td>
+                <td>Byrd</td>
+                <td>Letitia</td>
+                <td>NYU Langone Medical Center</td>
+              </tr>
+
+              <tr>
+                <td><input type="checkbox" name=""></td>
+                <td><a href="#">7FE0DB33FFFF</a></td>
+                <td>Salvatore</td>
+                <td>Erik</td>
+                <td>Princeton Rejuvination Institute, LLC</td>
+              </tr>
+
+              <tr>
+                <td><input type="checkbox" name=""></td>
+                <td><a href="#">25EA8828B25E</a></td>
+                <td>Jones</td>
+                <td>Myra</td>
+                <td>NYU Langone Medical Center</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4><a href="#">Show More Results</a></h4>
+        </section>
+
+        <section class="table-container">
+          <h2>Recent Patient Views</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <td><input type="checkbox" name=""></td>
+                <td>Chart ID</td>
+                <td>Last Name</td>
+                <td>First Name</td>
+                <td>EHR Source</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox" name=""></td>
+                <td><a href="#">410EEA3B81F8</a></td>
+                <td>Lynch</td>
+                <td>Matthew</td>
+                <td>Princeton Rejuvination Institute, LLC</td>
+              </tr>
+
+              <tr>
+                <td><input type="checkbox" name=""></td>
+                <td><a href="#">EA536DDCFCB8</a></td>
+                <td>Montoya</td>
+                <td>Cecilia</td>
+                <td>Princeton Rejuvination Institute, LLC</td>
+              </tr>
+
+              <tr>
+                <td><input type="checkbox" name=""></td>
+                <td><a href="#">910F0A9298BB</a></td>
+                <td>Robinson</td>
+                <td>Hazel</td>
+                <td>Stanford Healthcare</td>
+              </tr>
+
+              <tr>
+                <td><input type="checkbox" name=""></td>
+                <td><a href="#">65976DB5718E</a></td>
+                <td>Bradford</td>
+                <td>Neil</td>
+                <td>NYU Langone Medical Center</td>
+              </tr>
+
+              <tr>
+                <td><input type="checkbox" name=""></td>
+                <td><a href="#">E5AD165B75A8</a></td>
+                <td>Blackburn</td>
+                <td>Patrica</td>
+                <td>NYU Langone Medical Center</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4><a href="#">Show More Results</a></h4>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
