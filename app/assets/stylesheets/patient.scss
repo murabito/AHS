@@ -1,3 +1,107 @@
 // Place all the styles related to the Patient controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#patient-detail {
+  padding: 20px;
+}
+
+#patient-detail .column {
+  max-width: 100%;
+  padding: 30px 30px;
+  background: #ffffff;
+}
+
+#patient-detail h2 {
+  padding: 20px 0;
+  font-size: 2.25em;
+  font-weight: normal;
+  letter-spacing: 1.5px;
+}
+
+.info-links {
+  padding: 30px 0 40px 0;
+}
+
+.info-links li {
+  display: inline-block;
+  padding: 10px 0 10px 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1.05em;
+  letter-spacing: 1.25px;
+}
+
+.info-links li:after {
+  display: inline-block;
+  padding: 0 0 0 20px;
+  content: "\007C";
+  color: #788287;
+}
+
+.info-links li:first-of-type {
+  padding-left: 0; 
+}
+
+.info-links li:first-of-type:before {
+  display: inline-block;
+  padding: 0 20px 0 0;
+  content: "\005B";
+  color: #788287;
+}
+
+.info-links li:last-of-type {
+  padding-right: 0; 
+}
+
+.info-links li:last-of-type:after {
+  display: inline-block;
+  padding: 0 0 0 20px;
+  content: "\005D";
+  color: #788287;
+}
+
+.info-links a {
+  color: inherit;
+}
+
+.one-half {
+  width: 50%;
+  box-sizing: border-box;
+}
+
+.one-third {
+  width: 33.33%;
+  box-sizing: border-box;
+}
+
+.two-third {
+  width: 66.67%;
+  box-sizing: border-box;
+}
+
+.one-fourth {
+  width: 25%;
+  box-sizing: border-box;
+}
+
+.top-link {
+  display: block;
+  padding: 20px 0 0 0;
+  color: inherit;
+  text-transform: uppercase;
+}
+
+.top-link:before {
+  display: inline-block;
+  padding: 0 20px 0 0;
+  content: "\005B";
+  color: #788287;
+}
+
+.top-link:after {
+  display: inline-block;
+  padding: 0 0 0 20px;
+  content: "\005D";
+  color: #788287;
+}

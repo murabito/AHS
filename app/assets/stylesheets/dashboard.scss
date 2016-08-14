@@ -1,3 +1,137 @@
 // Place all the styles related to the Dashboard controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#dashboard .column {
+  max-width: 1080px;
+  margin: 10px auto;
+  box-sizing: border-box;
+}
+
+#search-section {
+  padding: 10px;  
+}
+
+#search-section:after {
+  clear: both;
+  content: '';
+  display: block;
+}
+
+.patient-search-container {
+  float: left;
+  width: 32.33%;
+  margin: 0 1.5% 0 0;
+  background: #ffffff;
+  border-radius: 2px;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.2);
+  box-sizing: border-box;
+}
+
+.patient-search-container:nth-of-type(3n) {
+  margin-right: 0;
+}
+
+.patient-search-container img {
+  padding: 15px;
+}
+
+.patient-search-container p {
+  padding: 15px;
+  color: #757575;
+}
+
+.patient-search-container footer {
+  border-top: 1px solid rgba(0,0,0,.1);
+}
+
+.patient-search-container a {
+  display: block;
+  max-width: 100%;
+  padding: 15px;
+  color: #00BCD4;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.patient-search-container a:hover {
+  color: #ffffff;
+  background: #00BCD4;
+}
+
+.table-container {
+  max-width: 100%;
+  padding: 10px;
+  margin: 10px 10px 20px 10px;
+  background: #ffffff;
+  border-radius: 2px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .2);
+  box-sizing: border-box;
+}
+
+.table-container h2, h4 {
+  padding: 30px 10px 20px 10px;
+}
+
+table {
+  width: 100%;
+  border: solid 1px rgba(0, 0, 0, .15);
+  border-radius: 2px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .15);
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+thead {
+  color: #788287;
+  font-weight: 600;
+  font-size: 1.15em;
+  background: #fbfbfc;
+}
+
+tbody tr {
+  border-top: solid 1px rgba(0, 0, 0, .15);
+}
+
+tbody tr:hover, tbody tr:hover input[type="checkbox"]:after  {
+  background: #d7dadb;
+}
+
+table td {
+  padding: 20px;
+}
+
+table a {
+  color: #191919;
+  font-weight: 600;
+}
+
+.table-container input[type="checkbox"] {
+  width: 1px;
+  height: 14px;
+  border: none;
+}
+
+.table-container input[type="checkbox"]:focus {
+  outline: none;
+}
+
+.table-container input[type="checkbox"]:after {
+  display: block;
+  content: "\00a0";
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border: solid 2px #6c757a;
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+
+input[type="checkbox"]:checked:after, tbody tr:hover input[type="checkbox"]:checked:after  {
+  display: block;
+  position: relative;
+  background: #6c757a;
+  color: #eceff1;
+  content: "\2713";
+  text-align: center;
+}

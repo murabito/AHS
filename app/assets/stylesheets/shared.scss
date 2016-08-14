@@ -1,0 +1,92 @@
+body {
+  font: normal 14px 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #191919;
+  background: #eceff1;
+}
+
+a {
+  text-decoration: none;
+}
+
+h1 {
+  color: #6c757a;
+  font-size: 1.5em;
+  font-weight: 500;
+}
+
+h2 {
+  color: #6c757a;
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+h3 {
+  padding: 10px 0;
+  color: #788287;
+  font-size: 1.25em;
+  font-weight: 600;
+  letter-spacing: 1.25px;
+}
+
+h4 {
+  font-size: 1.05em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+h4 a {
+  color: #191919;
+}
+
+main {
+  overflow: hidden;
+  margin: 0 0 0 300px;
+}
+
+body > header {
+  margin: 0 0 0 300px;
+  display: inline-block;
+  min-width: 100%;
+  padding: 20px 40px;
+  box-shadow: 0 1px 5px 0 #979797;
+  box-sizing: border-box;
+}
+
+#sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 300px;
+  float: left;
+  color: #eceff1;
+  background: #37474f;
+}
+
+#sidebar img {
+  display: block;
+  padding: 0 0 15px 0;
+  margin: 0 auto;
+}
+
+#sidebar header {
+  padding: 30px 15px; 
+  background: #263238;
+}
+
+#sidebar nav {
+  padding : 15px 0 0 0;
+  font-weight: 600;
+  font-size: 1.25em;
+}
+
+#sidebar nav a {
+  display: block;
+  padding: 15px 40px;
+  color: #a1a8ab;
+}
+
+#sidebar nav a:hover {
+  background: #059db5;
+  color: #37474f;
+}
