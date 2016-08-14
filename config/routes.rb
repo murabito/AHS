@@ -2,8 +2,6 @@ Rails.application.routes.draw do
   devise_for :users
   root 'user#dashboard'
   
-  get 'patient/show'
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
