@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root 'dashboard#searches'
 
   get 'dashboard', to: 'dashboard#searches'
+  get 'patient-search', to: 'dashboard#patient_search'
 
   get 'patient', to: 'patient#show', as: :patient
   
