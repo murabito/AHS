@@ -3,11 +3,12 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 #patient-detail {
+  overflow: hidden;
   padding: 20px;
 }
 
 #patient-detail .column {
-  max-width: 100%;
+  width: 100%;
   padding: 30px 30px;
   background: #ffffff;
 }
