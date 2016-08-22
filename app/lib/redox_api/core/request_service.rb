@@ -6,7 +6,7 @@ module RedoxApi::Core
     SECRET = ENV["REDOX_SECRET"]
     FORMAT = :json
 
-    def self.get_token
+    def self.authenticate
       body = { "apiKey" => API_KEY,
                "secret" => SECRET }
       method = "POST"
@@ -18,10 +18,15 @@ module RedoxApi::Core
                                         )
       
       response = request.perform
+    end
 
-      data = JSON.parse(response.body)
-      data["accessToken"]
+    def self.access_token(response)
+      response_data = JSON.parse(response.body)
+      response_data["accessToken"]
     end
 
   end
 end
+
+
+
