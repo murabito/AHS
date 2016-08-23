@@ -6,29 +6,36 @@ module RedoxApi::Core
     SECRET = ENV["REDOX_SECRET"]
     FORMAT = :json
 
-    def self.request
-      response = authenticate
-      token = access_token(response)
-      response = Response.new patient_query(token, "101-01-0001")
+    def self.request(method, path, options = {})
+      Response.new build_request(method, path, options).perform
     end
 
     def self.build_request(method, path, options = {})
       body = options.delete(:body) || ''
+      headers = options.delete(:headers) || {}
       method = "Net::HTTP::#{method.to_s.downcase.titleize}".constantize
       request = HTTParty::Request.new( method, 
                                        path,
                                        base_uri: BASE_URI,
                                        body: body
                                       )
-      
-      response = request.perform
+      request.options[:headers] = append_headers(headers, request, body) unless requires_no_header?(path)
+      request
+    end
+
+    def self.append_headers(headers, request, body)
+      token = access_token
+      auth_header = { "Authorization" => "Bearer #{token}" }
+      default_header = { 'Content-Type' => 'application/json' }
+      auth_header.merge(default_header).merge(headers)
     end
 
     def self.authenticated_response
       body = { "apiKey" => API_KEY,
                "secret" => SECRET }
       
-      response = Response.new build_request('POST', '/auth/authenticate', body: body)
+      authenticate_request = build_request('POST', '/auth/authenticate', body: body)
+      Response.new authenticate_request.perform
     end
 
     def self.access_token
@@ -37,10 +44,7 @@ module RedoxApi::Core
       response.data["accessToken"]
     end
 
-    def self.patient_query(token, ssn)
-      headers = { 'Authorization' => "Bearer #{token}",
-                  "Content-Type" => "application/json" }
-
+    def self.patient_query(ssn)
       body = {
         "Meta": {
           "DataModel": "PatientSearch",
@@ -54,31 +58,18 @@ module RedoxApi::Core
         },
         "Patient": {
           "Demographics": {
-            "FirstName": "Timothy",
-            "LastName": "Bixby",
-            "DOB": "2008-01-06",
             "SSN": ssn
           }
         }
       }
 
       body = body.to_json
-      method = "POST"
-      method = "Net::HTTP::#{method.to_s.downcase.titleize}".constantize
-      path = '/query'
-      request = HTTParty::Request.new( method, path,
-                                        base_uri: BASE_URI,
-                                        headers: headers,
-                                        body: body
-                                        )
 
-
-      
-      response = request.perform
+      request("POST", "/query", body: body)
     end
 
-    def is_success?
-      @status >= 200 && @status < 300
+    def self.requires_no_header?(path)
+      !!(path == '/auth/authenticate')
     end
 
   end
