@@ -6,29 +6,38 @@ module RedoxApi::Core
     SECRET = ENV["REDOX_SECRET"]
     FORMAT = :json
 
-    def self.authenticate
-      body = { "apiKey" => API_KEY,
-               "secret" => SECRET }
-      method = "POST"
+    def self.request
+      response = authenticate
+      token = access_token(response)
+      response = Response.new patient_query(token, "101-01-0001")
+    end
+
+    def self.build_request(method, path, options = {})
+      body = options.delete(:body) || ''
       method = "Net::HTTP::#{method.to_s.downcase.titleize}".constantize
-      path = '/auth/authenticate'
-      request = HTTParty::Request.new( method, path,
-                                        base_uri: BASE_URI,
-                                        body: body
-                                        )
+      request = HTTParty::Request.new( method, 
+                                       path,
+                                       base_uri: BASE_URI,
+                                       body: body
+                                      )
       
       response = request.perform
     end
 
-    def self.access_token(response)
-      response_data = JSON.parse(response.body)
-      response_data["accessToken"]
+    def self.authenticated_response
+      body = { "apiKey" => API_KEY,
+               "secret" => SECRET }
+      
+      response = Response.new build_request('POST', '/auth/authenticate', body: body)
     end
 
-    def self.patient_query(ssn)
-      response = RedoxApi::Core::RequestService.authenticate
-      token = RedoxApi::Core::RequestService.access_token(response)
-      
+    def self.access_token
+      response = authenticated_response
+
+      response.data["accessToken"]
+    end
+
+    def self.patient_query(token, ssn)
       headers = { 'Authorization' => "Bearer #{token}",
                   "Content-Type" => "application/json" }
 
@@ -48,19 +57,8 @@ module RedoxApi::Core
             "FirstName": "Timothy",
             "LastName": "Bixby",
             "DOB": "2008-01-06",
-            "SSN": ssn,
-            "PhoneNumber": {
-              "Home": "+18088675301",
-            },
-            "Address": {
-              "StreetAddress": "4762 Hickory Street",
-              "City": "Monroe",
-              "State": "WI",
-              "ZIP": "53566",
-              "County": "Green",
-              "Country": "US"
-            }
-          },
+            "SSN": ssn
+          }
         }
       }
 
@@ -73,8 +71,14 @@ module RedoxApi::Core
                                         headers: headers,
                                         body: body
                                         )
+
+
       
       response = request.perform
+    end
+
+    def is_success?
+      @status >= 200 && @status < 300
     end
 
   end
