@@ -1,0 +1,11 @@
+<main id="patient-search">
+  <h2>Patient Search</h2>
+
+  <%= form_tag("/retrieve-patient", method: "get") do |f| %>
+
+    <%= label_tag(:ssn, 'Social Security Number') %>
+    <%= text_field_tag(:ssn) %>
+
+    <%= submit_tag("Search for Patient") %>
+  <% end %>
+</main>
