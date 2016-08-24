@@ -44,30 +44,6 @@ module RedoxApi::Core
       response.data["accessToken"]
     end
 
-    def self.patient_query(ssn)
-      body = {
-        "Meta": {
-          "DataModel": "PatientSearch",
-          "EventType": "Query",
-          "Destinations": [
-            {
-              "ID": "0f4bd1d1-451d-4351-8cfd-b767d1b488d6",
-              "Name": "Patient Search Endpoint"
-            }
-          ]
-        },
-        "Patient": {
-          "Demographics": {
-            "SSN": ssn
-          }
-        }
-      }
-
-      body = body.to_json
-
-      request("POST", "/query", body: body)
-    end
-
     def self.requires_no_header?(path)
       !!(path == '/auth/authenticate')
     end
