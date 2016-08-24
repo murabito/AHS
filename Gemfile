@@ -32,6 +32,8 @@ gem 'devise'
 # Helpers for making HTTP requests
 gem 'httparty'
 
+gem 'pry'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
