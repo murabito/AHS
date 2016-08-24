@@ -9,21 +9,29 @@ class DashboardController < ApplicationController
   end
 
   def retrieve_patient
+    # ssn = params["ssn"]
+
     patient_data = patient_query_json
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_data)
 
-    # @patient = RedoxApi::Patient.new(ssn)
-    redirect_to patient_path(@patient)
+    if successful_query?(response)
+      flash.clear
+      # @patient = RedoxApi::Patient.new(ssn)
+      redirect_to patient_path(@patient)
+    else
+      flash.alert = "This data did not return a succesful patient query. Please re-enter patient data."
+      render :patient_search
+    end
   end
 
   def patient_query_json
-    ssn = params["ssn"]
-
     body = {
       "Meta": {
         "DataModel": "PatientSearch",
         "EventType": "Query",
+        "EventDateTime": "2016-08-19T14:35:15.783Z",
+        "Test": true,
         "Destinations": [
           {
             "ID": "0f4bd1d1-451d-4351-8cfd-b767d1b488d6",
@@ -33,11 +41,17 @@ class DashboardController < ApplicationController
       },
       "Patient": {
         "Demographics": {
-          "SSN": ssn
+          "LastName": "Bixby",
+          "DOB": "2008-01-06",
+          "SSN": params["ssn"],
         }
       }
     }
 
     body = body.to_json
+  end
+
+  def successful_query?(response)
+    !!response.data["Patient"]
   end
 end
