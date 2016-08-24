@@ -93,3 +93,12 @@ body > header {
   padding: 20px;
   border-radius: 5px;
 }
+
+.alert, .notice {
+  padding: 10px 20px 0 20px;
+  margin: 0 0 0 300px;
+}
+
+.alert {
+  color: #bd1c2a;
+}
