@@ -3,8 +3,8 @@ Rails.application.routes.draw do
   root 'dashboard#searches'
 
   get 'dashboard', to: 'dashboard#searches'
-  get 'patient-search', to: 'dashboard#patient_search'
-  get 'retrieve-patient', to: 'dashboard#retrieve_patient'
+  get 'patient-search', to: 'patient#search'
+  get 'retrieve-patient', to: 'patient#retrieve'
 
   get 'patient', to: 'patient#show', as: :patient
   
