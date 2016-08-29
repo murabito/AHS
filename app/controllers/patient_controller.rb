@@ -13,7 +13,6 @@ class PatientController < ApplicationController
       flash.alert = "This patient's clinical summary was not successfully returned from this EHR. Please search again."
       render :search
     end
-
   end
 
   def search
@@ -67,7 +66,7 @@ class PatientController < ApplicationController
       "Meta": {
         "DataModel": "Clinical Summary",
         "EventType": "Query",
-        "EventDateTime": "2016-08-19T14:35:15.783Z",
+        "EventDateTime": timestamp,
         "Test": true,
         "Destinations": [
           {
@@ -97,4 +96,7 @@ class PatientController < ApplicationController
     response.status >= 200 && response.status < 300
   end
 
+  def timestamp
+    Time.new.utc.iso8601
+  end
 end
