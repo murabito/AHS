@@ -40,7 +40,7 @@ class PatientController < ApplicationController
       "Meta": {
         "DataModel": "PatientSearch",
         "EventType": "Query",
-        "EventDateTime": "2016-08-19T14:35:15.783Z",
+        "EventDateTime": timestamp,
         "Test": true,
         "Destinations": [
           {
