@@ -2,6 +2,9 @@ class PatientController < ApplicationController
   before_action :authenticate_user!
 
   def show
+    clinical_summary_request_body = clinical_summary_body_json(params["patient_id"])
+
+    response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
   end
 
   def search
@@ -10,7 +13,7 @@ class PatientController < ApplicationController
   def retrieve
     # ssn = params["ssn"]
 
-    patient_data = patient_query_json
+    patient_data = patient_query_body_json
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_data)
 
@@ -24,7 +27,7 @@ class PatientController < ApplicationController
     end
   end
 
-  def patient_query_json
+  def patient_query_body_json
     body = {
       "Meta": {
         "DataModel": "PatientSearch",
@@ -44,6 +47,33 @@ class PatientController < ApplicationController
           "DOB": "2008-01-06",
           "SSN": params["ssn"],
         }
+      }
+    }
+
+    body = body.to_json
+  end
+
+  def clinical_summary_body_json(patient_id)
+    body = {
+      "Meta": {
+        "DataModel": "Clinical Summary",
+        "EventType": "Query",
+        "EventDateTime": "2016-08-19T14:35:15.783Z",
+        "Test": true,
+        "Destinations": [
+          {
+            "ID": "ef9e7448-7f65-4432-aa96-059647e9b357",
+            "Name": "Clinical Summary Endpoint"
+          }
+        ]
+      },
+      "Patient": {
+        "Identifiers": [
+          {
+            "ID": patient_id,
+            "IDType": "NIST"
+          }
+        ]
       }
     }
 
