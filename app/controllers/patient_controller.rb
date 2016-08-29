@@ -5,6 +5,15 @@ class PatientController < ApplicationController
     clinical_summary_request_body = clinical_summary_body_json(params["patient_id"])
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
+
+    if successful_response?(response)
+      flash.clear
+
+    else
+      flash.alert = "This patient's clinical summary was not successfully returned from this EHR. Please search again."
+      render :search
+    end
+
   end
 
   def search
@@ -83,4 +92,9 @@ class PatientController < ApplicationController
   def successful_query?(response)
     !!response.data["Patient"]
   end
+
+  def successful_response?(response)
+    response.status >= 200 && response.status < 300
+  end
+
 end
