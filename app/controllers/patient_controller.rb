@@ -17,10 +17,10 @@ class PatientController < ApplicationController
     if successful_query?(response)
       flash.clear
       @patient = RedoxApi::Patient.new(response.data["Patient"])
-      self.show
+      redirect_to patient_path(patient_id: @patient.id)
     else
       flash.alert = "This data did not return a succesful patient query. Please re-enter patient data."
-      render :patient_search
+      render :search
     end
   end
 
