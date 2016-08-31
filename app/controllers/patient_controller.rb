@@ -10,6 +10,7 @@ class PatientController < ApplicationController
       flash.clear
 
       @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
+      @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
     else
       flash.alert = "This patient's clinical summary was not successfully returned from this EHR. Please search again."
       render :search
