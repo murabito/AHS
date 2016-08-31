@@ -1,6 +1,7 @@
 <main id="patient-detail">
   <div class="column">
-    <h2>Patient Detail - Chart ID 25EA8828B25E: Jones, Myra [NYU Langone Medical Center]</h2>
+
+    <h2>Patient Detail - Chart ID <%= @clinical_summary.id %>: <%= @clinical_summary.patient_last_name %>, <%= @clinical_summary.patient_first_name %> [NYU Langone Medical Center]</h2>
 
     <ul class="info-links">
       <li><a href="#">Demographics</a></li>
