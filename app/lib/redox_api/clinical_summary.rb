@@ -12,6 +12,10 @@ module RedoxApi
       self.data["Header"]["Document"]["ID"].upcase
     end
 
+    def family_history
+      self.data["FamilyHistory"]
+    end
+
     def has_allergies_data?
       !self.data["Allergies"].blank?
     end

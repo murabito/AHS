@@ -1,0 +1,20 @@
+<% @clinical_summary.family_history.each do | family_member | %>
+  <h6><%= family_member["Relation"]["Name"] %><%= " (Deceased)" if family_member["Relation"]["IsDeceased"] %></h6>
+  <table class="family-history-table">
+    <tbody>
+      <thead>
+        <tr>
+          <td>Diagnosis</td>
+          <td>Age at Onset</td>
+        </tr>
+      </thead>
+
+      <% family_member["Problems"].each do | problem | %>
+        <tr>
+          <td class="one-half"><%= problem["Name"] %></td>
+          <td class="one-half"><%= problem["AgeAtOnset"] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

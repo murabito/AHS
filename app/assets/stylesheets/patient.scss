@@ -23,8 +23,20 @@
   letter-spacing: 1.5px;
 }
 
+#patient-detail thead {
+  font-size: 1em;
+}
+
 #patient-detail .no-data-message {
   padding: 5px 0 0 20px;
+}
+
+.family-history-table {
+  margin-bottom: 20px;
+}
+
+.family-history-table:last-of-type {
+  margin-bottom: 0;
 }
 
 .info-links {

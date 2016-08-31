@@ -5,10 +5,8 @@
 
     <ul class="info-links">
       <li><%= link_to 'Demographics', '#demographics' %></li>
-      <li><%= link_to 'Allergies', '#allergies' %></li>
-      <li><%= link_to 'Encounters', '#encounters' %></li>
+      <li><%= link_to 'Family History', '#family-history' %></li>
 
-      <li><a href="#family-history">Family History</a></li>
       <li><a href="#immunizations">Immunizations</a></li>
       <li><a href="#medications">Medications</a></li>
       <li><a href="#">Plan of Care</a></li>
@@ -26,5 +24,32 @@
 
       <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
     </section>
+
+    <section id="family-history">
+      <h3>Family History</h3>
+
+      <% if @clinical_summary.has_family_history_data? %>
+        <%= render partial: 'family_history' %>
+      <% else %>
+        <p class="no-data-message">This patient has no reported family history.</p>
+      <% end %>
+
+      <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
+    </section>
+
+    
   </div>
 </main>
+
+
+
+
+
+
+
+
+
+
+
+
+
