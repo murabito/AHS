@@ -25,5 +25,9 @@ module RedoxApi
     def first_name
       self.data["Demographics"]["FirstName"].titlecase
     end
+
+    def dob
+      Date.new(self.data["Demographics"]["DOB"].to_d)
+    end
   end
 end

@@ -4,9 +4,10 @@
     <h2>Patient Detail - Chart ID <%= @clinical_summary.id %>: <%= @patient.last_name %>, <%= @patient.first_name %> [NYU Langone Medical Center]</h2>
 
     <ul class="info-links">
-      <li><a href="#demographics">Demographics</a></li>
-      <li><a href="#allergies">Allergies</a></li>
-      <li><a href="#encounters">Encounters</a></li>
+      <li><%= link_to 'Demographics', '#demographics' %></li>
+      <li><%= link_to 'Allergies', '#allergies' %></li>
+      <li><%= link_to 'Encounters', '#encounters' %></li>
+
       <li><a href="#family-history">Family History</a></li>
       <li><a href="#immunizations">Immunizations</a></li>
       <li><a href="#medications">Medications</a></li>
@@ -23,8 +24,7 @@
 
       <%= render partial: 'demographics' %>
 
-      <a href="patient-detail.html" class="top-link">Top</a>
+      <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
     </section>
-
   </div>
 </main>
