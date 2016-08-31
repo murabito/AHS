@@ -9,7 +9,7 @@ module RedoxApi
     end
 
     def document_id
-      @data["Header"]["Document"]["ID"].upcase
+      self.data["Header"]["Document"]["ID"].upcase
     end
   end
 end

@@ -17,5 +17,13 @@ module RedoxApi
       end
       nist_id
     end
+
+    def last_name
+      self.data["Demographics"]["LastName"].titlecase
+    end
+
+    def first_name
+      self.data["Demographics"]["FirstName"].titlecase
+    end
   end
 end
