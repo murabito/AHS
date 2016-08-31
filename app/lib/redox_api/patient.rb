@@ -29,5 +29,68 @@ module RedoxApi
     def dob
       Date.new(self.data["Demographics"]["DOB"].to_d)
     end
+
+    def ssn
+      self.data["Demographics"]["SSN"]
+    end
+
+    def sex
+      self.data["Demographics"]["Sex"]
+    end
+
+    def street_address
+      self.data["Demographics"]["Address"]["StreetAddress"]
+    end
+
+    def city
+      self.data["Demographics"]["Address"]["City"]
+    end
+
+    def state
+      self.data["Demographics"]["Address"]["State"]
+    end
+
+    def county
+      self.data["Demographics"]["Address"]["County"]
+    end
+
+    def country
+      self.data["Demographics"]["Address"]["Country"]
+    end
+
+    def zip
+      self.data["Demographics"]["Address"]["ZIP"]
+    end
+
+    def home_phone
+      self.data["Demographics"]["PhoneNumber"]["Home"]
+    end
+
+    def mobile_phone
+      self.data["Demographics"]["PhoneNumber"]["Mobile"]
+    end
+
+    def email
+      email_array = self.data["Demographics"]["EmailAddresses"]
+      email_list = email_array.first["Address"]
+
+      if email_array.count > 1
+        email_array.each { | address | email_list = email_list + ', ' + address["Address"] }
+      end
+
+      email_list
+    end
+
+    def race
+      self.data["Demographics"]["Race"]
+    end
+
+    def ethnicity
+      self.data["Demographics"]["Ethnicity"]
+    end
+
+    def marital_status
+      self.data["Demographics"]["MaritalStatus"]
+    end
   end
 end
