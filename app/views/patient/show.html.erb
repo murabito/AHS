@@ -8,10 +8,8 @@
       <li><%= link_to 'Family History', '#family-history' %></li>
       <li><%= link_to 'Medications', '#medications' %></li>
       <li><%= link_to 'Problems', '#problems' %></li>
+      <li><%= link_to 'Social History', '#social-history' %></li>
 
-      <li><a href="#">Procedures</a></li>
-      <li><a href="#">Results</a></li>
-      <li><a href="#">Social History</a></li>
       <li><a href="#">Vital Signs</a></li>
     </ul>
 
@@ -54,6 +52,18 @@
         <%= render partial: 'problems' %>
       <% else %>
         <p class="no-data-message">This patient has no reported problems.</p>
+      <% end %>
+
+      <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
+    </section>
+
+    <section id="social-history">
+      <h3>Social History</h3>
+
+      <% if @clinical_summary.has_social_history_data? %>
+        <%= render partial: 'social_history' %>
+      <% else %>
+        <p class="no-data-message">This patient has no reported social history.</p>
       <% end %>
 
       <%= link_to 'Top', '#patient-detail', class: 'top-link' %>

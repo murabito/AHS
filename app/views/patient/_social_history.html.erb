@@ -1,0 +1,38 @@
+<table>
+  <tbody>
+    <thead>
+      <tr>
+        <td class="one-third">Social History Element</td>
+        <td class="one-third">Description</td>
+        <td class="one-third">Effective Dates</td>
+      </tr>
+    </thead>
+
+    <% @clinical_summary.social_history_observations.each do | observation | %>
+      <tr>
+        <td class="one-third">Observation</td>
+        <td class="one-third"><%= observation["Name"].capitalize %></td>
+        <td class="one-third"><%= formatted_date(observation["StartDate"]) %></td>
+      </tr>
+    <% end %>
+  
+    <% @clinical_summary.social_history_pregnancies.each do | observation | %>
+      <tr>
+        <td class="one-third">Pregnancy</td>
+        <td class="one-third">n/a</td>
+        <td class="one-third"><%= effective_date_str(observation["StartDate"], observation["EndDate"]) %></td>
+      </tr>
+    <% end %>
+
+    <% @clinical_summary.social_history_tobacco_use.each do | observation | %>
+      <% observation["EndDate"] = '2016-07-25' %>
+
+      <tr>
+        <td class="one-third">Tobacco Use</td>
+        <td class="one-third"><%= observation["Name"].capitalize %></td>
+        <td class="one-third"><%= effective_date_str(observation["StartDate"], observation["EndDate"]) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
