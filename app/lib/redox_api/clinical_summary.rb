@@ -16,6 +16,10 @@ module RedoxApi
       self.data["FamilyHistory"]
     end
 
+    def medications
+      self.data["Medications"]
+    end
+
     def has_allergies_data?
       !self.data["Allergies"].blank?
     end
