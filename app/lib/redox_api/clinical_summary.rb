@@ -36,6 +36,10 @@ module RedoxApi
       self.data["SocialHistory"]["TobaccoUse"]
     end
 
+    def vital_signs
+      self.data["VitalSigns"]
+    end
+
     def has_allergies_data?
       !self.data["Allergies"].blank?
     end
@@ -59,22 +63,9 @@ module RedoxApi
     def has_social_history_data?
       !self.data["SocialHistory"].blank?
     end
+
+    def has_vital_signs_data?
+      !self.data["VitalSigns"].blank?
+    end
   end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

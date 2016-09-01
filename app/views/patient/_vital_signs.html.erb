@@ -1,0 +1,23 @@
+<table>
+  <tbody>
+    <thead>
+      <tr>
+        <td class="one-fourth">Date</td>
+        <td class="one-fourth">Height</td>
+        <td class="one-fourth">Weight</td>
+        <td class="one-fourth">Blood Pressure</td>
+      </tr>
+    </thead>
+
+    <% @clinical_summary.vital_signs.each do | vital_sign_group | %>
+      <tr>
+        <td class="one-fourth"><%= formatted_date(vital_sign_group["DateTime"]) %></td>
+        <td class="one-fourth"><%=  %></td>
+        <td class="one-fourth"><%=  %></td>
+        <td class="one-fourth"><%=  %></td>
+      </tr>
+
+
+    <% end %>
+  </tbody>
+</table>

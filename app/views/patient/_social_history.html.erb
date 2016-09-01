@@ -26,7 +26,6 @@
 
     <% @clinical_summary.social_history_tobacco_use.each do | observation | %>
       <% observation["EndDate"] = '2016-07-25' %>
-
       <tr>
         <td class="one-third">Tobacco Use</td>
         <td class="one-third"><%= observation["Name"].capitalize %></td>

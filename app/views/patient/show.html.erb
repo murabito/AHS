@@ -9,8 +9,7 @@
       <li><%= link_to 'Medications', '#medications' %></li>
       <li><%= link_to 'Problems', '#problems' %></li>
       <li><%= link_to 'Social History', '#social-history' %></li>
-
-      <li><a href="#">Vital Signs</a></li>
+      <li><%= link_to 'Vital Signs', '#vital-signs' %></li>
     </ul>
 
     <section id="demographics">
@@ -68,15 +67,17 @@
 
       <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
     </section>
+
+    <section id="vital-signs">
+      <h3>Vital Signs</h3>
+
+      <% if @clinical_summary.has_vital_signs_data? %>
+        <%= render partial: 'vital_signs' %>
+      <% else %>
+        <p class="no-data-message">This patient has no reported vital signs.</p>
+      <% end %>
+
+      <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
+    </section>
   </div>
 </main>
-
-
-
-
-
-
-
-
-
-
