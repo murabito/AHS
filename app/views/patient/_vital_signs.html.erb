@@ -14,10 +14,8 @@
         <td class="one-fourth"><%= formatted_date(vital_sign_group["DateTime"]) %></td>
         <td class="one-fourth"><%= height(vital_sign_group)  %></td>
         <td class="one-fourth"><%= weight(vital_sign_group) %></td>
-        <td class="one-fourth"><%=  %></td>
+        <td class="one-fourth"><%= blood_pressure(vital_sign_group) %></td>
       </tr>
-
-
     <% end %>
   </tbody>
 </table>
