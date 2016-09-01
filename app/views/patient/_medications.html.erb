@@ -11,8 +11,8 @@
 
     <% @clinical_summary.medications.each do | medication | %>
       <tr>
-        <td class="one-third"><%= medication["Product"]["Name"] %></td>
-        <td class="one-third"><%= medication["FreeTextSig"] %></td>
+        <td class="one-third"><%= medication["Product"]["Name"].capitalize %></td>
+        <td class="one-third"><%= medication["FreeTextSig"].capitalize %></td>
         <td class="one-sixth"><%= start_date(medication) %></td>
         <td class="one-sixth"><%= status(medication) %></td>
       </tr>

@@ -6,11 +6,9 @@
     <ul class="info-links">
       <li><%= link_to 'Demographics', '#demographics' %></li>
       <li><%= link_to 'Family History', '#family-history' %></li>
+      <li><%= link_to 'Medications', '#medications' %></li>
+      <li><%= link_to 'Problems', '#problems' %></li>
 
-      <li><a href="#immunizations">Immunizations</a></li>
-      <li><a href="#medications">Medications</a></li>
-      <li><a href="#">Plan of Care</a></li>
-      <li><a href="#">Problems</a></li>
       <li><a href="#">Procedures</a></li>
       <li><a href="#">Results</a></li>
       <li><a href="#">Social History</a></li>
@@ -48,5 +46,27 @@
 
       <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
     </section>
+
+    <section id="problems">
+      <h3>Problems</h3>
+
+      <% if @clinical_summary.has_problems_data? %>
+        <%= render partial: 'problems' %>
+      <% else %>
+        <p class="no-data-message">This patient has no reported problems.</p>
+      <% end %>
+
+      <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
+    </section>
   </div>
 </main>
+
+
+
+
+
+
+
+
+
+

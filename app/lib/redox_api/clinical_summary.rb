@@ -20,6 +20,10 @@ module RedoxApi
       self.data["Medications"]
     end
 
+    def problems
+      self.data["Problems"]
+    end
+
     def has_allergies_data?
       !self.data["Allergies"].blank?
     end
@@ -34,6 +38,10 @@ module RedoxApi
 
     def has_medications_data?
       !self.data["Medications"].blank?
+    end
+
+    def has_problems_data?
+      !self.data["Problems"].blank?
     end
   end
 end

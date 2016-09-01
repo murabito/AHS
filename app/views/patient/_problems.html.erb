@@ -1,0 +1,17 @@
+<table>
+  <tbody>
+    <thead>
+      <tr>
+        <td class="one-half">Problem</td>
+        <td class="one-half">Status</td>
+      </tr>
+    </thead>
+
+    <% @clinical_summary.problems.each do | problem | %>
+      <tr>
+        <td class="one-half"><%= problem["Name"].capitalize %></td>
+        <td class="one-half"><%= problem["Status"]["Name"].capitalize %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
