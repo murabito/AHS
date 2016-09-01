@@ -27,5 +27,9 @@ module RedoxApi
     def has_family_history_data?
       !self.data["FamilyHistory"].blank?
     end
+
+    def has_medications_data?
+      !self.data["Medications"].blank?
+    end
   end
 end

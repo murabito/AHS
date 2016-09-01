@@ -37,6 +37,18 @@
       <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
     </section>
 
+    <section id="medications">
+      <h3>Medications</h3>
+
+      <% if @clinical_summary.has_medications_data? %>
+        <%= render partial: 'medications' %>
+      <% else %>
+        <p class="no-data-message">This patient has no reported medications.</p>
+      <% end %>
+
+      <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
+    </section>
+
     
   </div>
 </main>
