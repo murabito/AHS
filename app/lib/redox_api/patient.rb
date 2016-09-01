@@ -27,7 +27,7 @@ module RedoxApi
     end
 
     def dob
-      Date.new(self.data["Demographics"]["DOB"].to_d)
+      Date.strptime(self.data["Demographics"]["DOB"], '%Y-%m-%d')
     end
 
     def ssn
