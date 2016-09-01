@@ -36,4 +36,39 @@ module PatientHelper
       return 'Inactive'
     end
   end
+
+  def height(vital_sign_group)
+    observations = vital_sign_group["Observations"]
+    height_data = observations.select { | vital_sign | vital_sign["Code"] == "8302-2" }.first
+
+    return '' if !height_data
+    height_data["Value"] + ' ' + height_data["Units"]
+  end
+
+  def weight(vital_sign_group)
+    observations = vital_sign_group["Observations"]
+    weight_data = observations.select { | vital_sign | vital_sign["Code"] == "3141-9" }.first
+
+    return '' if !weight_data
+    weight_data["Value"] + ' ' + weight_data["Units"]
+  end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
