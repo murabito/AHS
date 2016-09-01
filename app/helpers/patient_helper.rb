@@ -1,4 +1,9 @@
 module PatientHelper
+  def age_at_onset(problem)
+    return 'Unavailable'if problem["AgeAtOnset"].blank?
+    problem["AgeAtOnset"]
+  end
+
   def start_date(medication)
     Date.strptime(medication["StartDate"], '%Y-%m-%d')
   end
