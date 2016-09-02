@@ -5,10 +5,16 @@
 
     <ul class="info-links">
       <li><%= link_to 'Demographics', '#demographics' %></li>
+      <li><%= link_to 'Allergies', '#allergies' %></li>
+      <li><%= link_to 'Encounters', '#encounters' %></li>
       <li><%= link_to 'Family History', '#family-history' %></li>
+      <li><%= link_to 'Immunizations', '#immunizations' %></li>
+      <li><%= link_to 'Medical Equipment', '#medical-equipment' %></li>
       <li><%= link_to 'Medications', '#medications' %></li>
       <li><%= link_to 'Plan of Care', '#plan-of-care' %></li>
       <li><%= link_to 'Problems', '#problems' %></li>
+      <li><%= link_to 'Procedures', '#procedures' %></li>
+      <li><%= link_to 'Results', '#results' %></li>
       <li><%= link_to 'Social History', '#social-history' %></li>
       <li><%= link_to 'Vital Signs', '#vital-signs' %></li>
     </ul>
@@ -17,6 +23,30 @@
       <h3>Demographics</h3>
 
       <%= render partial: 'demographics' %>
+
+      <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
+    </section>
+
+    <section id="allergies">
+      <h3>Allergies</h3>
+
+      <% if @clinical_summary.has_allergies_data? %>
+        <%= render partial: 'allergies' %>
+      <% else %>
+        <p class="no-data-message">This patient has no reported allergies.</p>
+      <% end %>
+
+      <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
+    </section>
+
+    <section id="encounters">
+      <h3>Encounters</h3>
+
+      <% if @clinical_summary.has_encounters_data? %>
+        <%= render partial: 'encounters' %>
+      <% else %>
+        <p class="no-data-message">This patient has no reported encounters.</p>
+      <% end %>
 
       <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
     </section>

@@ -76,6 +76,14 @@ module RedoxApi
       !self.data["FamilyHistory"].blank?
     end
 
+    def has_immunizations_data?
+      !self.data["Immunizations"].blank?
+    end
+
+    def has_medical_equipment_data?
+      !self.data["MedicalEquipment"].blank?
+    end
+
     def has_medications_data?
       !self.data["Medications"].blank?
     end
@@ -86,6 +94,14 @@ module RedoxApi
 
     def has_problems_data?
       !self.data["Problems"].blank?
+    end
+
+    def has_procedures_data?
+      !self.data["Procedures"].blank?
+    end
+
+    def has_results_data?
+      !self.data["Results"].blank?
     end
 
     def has_social_history_data?
