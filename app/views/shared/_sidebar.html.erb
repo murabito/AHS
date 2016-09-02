@@ -1,12 +1,12 @@
 <div id="sidebar">
   <header>
     <%= image_tag "logo.png" %>
-    user@ahs-cloud.com
+    <%= current_user.email %>
   </header>
   <nav>
     <ul>
-      <li><a href="#">Clinical Dashboard</a></li>
-      <li><a href="#">Patient Search</a></li>
+      <li><a href="<%= root_path %>">Clinical Dashboard</a></li>
+      <li><a href="<%= patient_search_path %>">Patient Search</a></li>
       <li><a href="#">Saved</a></li>
       <li><a href="#">Recent</a></li>
       <li><a href="#">Preferences</a></li>
