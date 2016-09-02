@@ -53,8 +53,8 @@ class PatientController < ApplicationController
       },
       "Patient": {
         "Demographics": {
-          "LastName": "Bixby",
-          "DOB": "2008-01-06",
+          "LastName": params["last_name"],
+          "DOB": params["dob"],
           "SSN": params["ssn"],
         }
       }
