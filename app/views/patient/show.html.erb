@@ -63,6 +63,30 @@
       <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
     </section>
 
+    <section id="immunizations">
+      <h3>Immunizations</h3>
+
+      <% if @clinical_summary.has_immunizations_data? %>
+        <%= render partial: 'immunizations' %>
+      <% else %>
+        <p class="no-data-message">This patient has no reported immunizations.</p>
+      <% end %>
+
+      <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
+    </section>
+
+    <section id="medical-equipment">
+      <h3>Medical Equipment</h3>
+
+      <% if @clinical_summary.has_medical_equipment_data? %>
+        <%= render partial: 'medical_equipment' %>
+      <% else %>
+        <p class="no-data-message">This patient has no reported medical equipment.</p>
+      <% end %>
+
+      <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
+    </section>
+
     <section id="medications">
       <h3>Medications</h3>
 
@@ -94,6 +118,30 @@
         <%= render partial: 'problems' %>
       <% else %>
         <p class="no-data-message">This patient has no reported problems.</p>
+      <% end %>
+
+      <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
+    </section>
+
+    <section id="procedures">
+      <h3>Procedures</h3>
+
+      <% if @clinical_summary.has_procedures_data? %>
+        <%= render partial: 'procedures' %>
+      <% else %>
+        <p class="no-data-message">This patient has no reported procedures.</p>
+      <% end %>
+
+      <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
+    </section>
+
+    <section id="results">
+      <h3>Results</h3>
+
+      <% if @clinical_summary.has_results_data? %>
+        <%= render partial: 'results' %>
+      <% else %>
+        <p class="no-data-message">This patient has no reported results.</p>
       <% end %>
 
       <%= link_to 'Top', '#patient-detail', class: 'top-link' %>

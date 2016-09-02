@@ -97,7 +97,9 @@ module RedoxApi
     end
 
     def has_procedures_data?
-      !self.data["Procedures"].blank?
+      !self.data["Procedures"]["Observations"].blank? && 
+      !self.data["Procedures"]["Procedures"].blank? && 
+      !self.data["Procedures"]["Services"].blank?
     end
 
     def has_results_data?
