@@ -2,10 +2,21 @@
   <h2>Patient Search</h2>
 
   <%= form_tag("/retrieve-patient", method: "get") do |f| %>
+    <div>
+      <%= label_tag(:ssn, 'Social Security Number') %>
+      <%= text_field_tag :ssn, nil, placeholder: '101-01-001' %>
+    </div>
 
-    <%= label_tag(:ssn, 'Social Security Number') %>
-    <%= text_field_tag(:ssn) %>
+    <div>
+      <%= label_tag(:last_name, 'Last Name') %>
+      <%= text_field_tag :last_name, nil, placeholder: 'Bixby' %>
+    </div>
 
-    <%= submit_tag("Search for Patient") %>
+    <div>
+      <%= label_tag(:dob, 'Date of Birth') %>
+      <%= text_field_tag :dob, nil, placeholder: '2008-01-06' %>
+    </div>
+
+    <%= submit_tag("Search for Patient", { class: 'button' }) %>
   <% end %>
 </main>
