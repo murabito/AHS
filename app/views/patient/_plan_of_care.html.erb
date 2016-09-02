@@ -1,0 +1,18 @@
+<table>
+  <tbody>
+    <thead>
+      <tr>
+        <td class="three-fourth">Planned Activity</td>
+        <td class="one-fourth">Planned Date</td>
+      </tr>
+    </thead>
+
+    <% @clinical_summary.plan_of_care_orders.each do | order | %>
+      <tr>
+        <td class="three-fourth"><%= order["Name"]  %></td>
+        <td class="one-fourth"><%= order["DateTime"].blank? ? '--' : formatted_date(order["DateTime"]) %></td>
+      </tr>
+    <% end %>
+
+  </tbody>
+</table>

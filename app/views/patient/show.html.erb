@@ -7,6 +7,7 @@
       <li><%= link_to 'Demographics', '#demographics' %></li>
       <li><%= link_to 'Family History', '#family-history' %></li>
       <li><%= link_to 'Medications', '#medications' %></li>
+      <li><%= link_to 'Plan of Care', '#plan-of-care' %></li>
       <li><%= link_to 'Problems', '#problems' %></li>
       <li><%= link_to 'Social History', '#social-history' %></li>
       <li><%= link_to 'Vital Signs', '#vital-signs' %></li>
@@ -39,6 +40,18 @@
         <%= render partial: 'medications' %>
       <% else %>
         <p class="no-data-message">This patient has no reported medications.</p>
+      <% end %>
+
+      <%= link_to 'Top', '#patient-detail', class: 'top-link' %>
+    </section>
+
+    <section id="plan-of-care">
+      <h3>Plan of Care</h3>
+
+      <% if @clinical_summary.has_plan_of_care_data? %>
+        <%= render partial: 'plan_of_care' %>
+      <% else %>
+        <p class="no-data-message">This patient has no reported plan of care.</p>
       <% end %>
 
       <%= link_to 'Top', '#patient-detail', class: 'top-link' %>

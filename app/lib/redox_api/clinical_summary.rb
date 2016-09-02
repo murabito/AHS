@@ -20,6 +20,30 @@ module RedoxApi
       self.data["Medications"]
     end
 
+    def plan_of_care_orders
+      self.data["PlanOfCare"]["Orders"]
+    end
+
+    def plan_of_care_procedures
+      self.data["PlanOfCare"]["Procedures"]
+    end
+
+    def plan_of_care_encounters
+      self.data["PlanOfCare"]["Encounters"]
+    end
+
+    def plan_of_care_medication_administration
+      self.data["PlanOfCare"]["MedicationAdministration"]
+    end
+
+    def plan_of_care_supplies
+      self.data["PlanOfCare"]["Supplies"]
+    end
+
+    def plan_of_care_services
+      self.data["PlanOfCare"]["Services"]
+    end
+
     def problems
       self.data["Problems"]
     end
@@ -54,6 +78,10 @@ module RedoxApi
 
     def has_medications_data?
       !self.data["Medications"].blank?
+    end
+
+    def has_plan_of_care_data?
+      !self.data["PlanOfCare"].blank?
     end
 
     def has_problems_data?
