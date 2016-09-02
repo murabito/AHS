@@ -4,6 +4,20 @@ body {
   background: #eceff1;
 }
 
+.box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -200px 0 0 -350px;
+  padding: 20px;
+  width: 700px;
+  height: 400px;
+  background: #ffffff;
+  border: 1px solid #6c757a;
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+
 a {
   text-decoration: none;
 }
@@ -12,6 +26,12 @@ h1 {
   color: #6c757a;
   font-size: 1.5em;
   font-weight: 500;
+}
+
+.login h1 {
+  padding: 20px;
+  text-align: center;
+  font-size: 2em;
 }
 
 h2 {
@@ -104,9 +124,73 @@ body > header h1 {
 
 .alert, .notice {
   padding: 10px 20px 0 20px;
-  margin: 0 0 0 300px;
+  text-align: center;
+}
+
+.login .alert, .login .notice {
+  margin: 0 auto;
+  text-align: center;
 }
 
 .alert {
   color: #bd1c2a;
 }
+
+form {
+  padding: 20px;
+}
+
+form label {
+  font-size: 1.25em;
+  font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #191919;
+}
+
+.forgot-password {
+  padding: 20px;
+  color: #191919;
+}
+
+input[type="email"], .login input[type="password"] {
+  width: 400px;
+  margin: 5px 0 20px 0;
+  padding: 5px 10px;
+  font-size: 1.25em;
+  font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #191919;
+  border: 1px solid #6c757a;
+  border-radius: 2px;
+}
+
+.button {
+  padding: 10px 20px;
+  font-size: 1.25em;
+  background: #ffffff;
+  border: 1px solid #6c757a;
+  color: #6c757a;
+  text-transform: uppercase;
+}
+
+.button:hover {
+  background: #6c757a;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+#login-hr {
+  height: 2px;
+  background: #eceff1;
+  border: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
