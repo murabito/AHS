@@ -14,5 +14,39 @@
       </tr>
     <% end %>
 
+    <% @clinical_summary.plan_of_care_procedures.each do | procedure | %>
+      <tr>
+        <td class="three-fourth"><%= procedure["Name"]  %></td>
+        <td class="one-fourth"><%= procedure["DateTime"].blank? ? '--' : formatted_date(procedure["DateTime"]) %></td>
+      </tr>
+    <% end %>
+
+    <% @clinical_summary.plan_of_care_encounters.each do | encounter | %>
+      <tr>
+        <td class="three-fourth"><%= encounter["Name"]  %></td>
+        <td class="one-fourth"><%= encounter["DateTime"].blank? ? '--' : formatted_date(encounter["DateTime"]) %></td>
+      </tr>
+    <% end %>
+
+    <% @clinical_summary.plan_of_care_medication.each do | medication | %>
+      <tr>
+        <td class="three-fourth"><%= medication["Product"]["Name"].capitalize  %></td>
+        <td class="one-fourth"><%= medication["StartDate"].blank? ? '--' : formatted_date(medication["StartDate"]) %></td>
+      </tr>
+    <% end %>
+
+    <% @clinical_summary.plan_of_care_supplies.each do | supply | %>
+      <tr>
+        <td class="three-fourth"><%= supply["Name"]  %></td>
+        <td class="one-fourth"><%= supply["DateTime"].blank? ? '--' : formatted_date(supply["DateTime"]) %></td>
+      </tr>
+    <% end %>
+
+    <% @clinical_summary.plan_of_care_services.each do | service | %>
+      <tr>
+        <td class="three-fourth"><%= service["Name"]  %></td>
+        <td class="one-fourth"><%= service["DateTime"].blank? ? '--' : formatted_date(service["DateTime"]) %></td>
+      </tr>
+    <% end %>
   </tbody>
 </table>

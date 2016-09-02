@@ -32,7 +32,7 @@ module RedoxApi
       self.data["PlanOfCare"]["Encounters"]
     end
 
-    def plan_of_care_medication_administration
+    def plan_of_care_medication
       self.data["PlanOfCare"]["MedicationAdministration"]
     end
 
