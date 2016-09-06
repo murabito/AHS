@@ -1,0 +1,17 @@
+<table>
+  <tbody>
+    <thead>
+      <tr>
+        <td class="three-fourth">Vaccine</td>
+        <td class="one-fourth">Date</td>
+      </tr>
+    </thead>
+
+    <% @clinical_summary.immunizations.each do | immunization | %>
+      <tr>
+        <td class="three-fourth"><%= immunization["Product"]["Name"] %></td>
+        <td class="one-fourth"><%= formatted_date(immunization["DateTime"]) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

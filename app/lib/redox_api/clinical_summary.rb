@@ -20,6 +20,10 @@ module RedoxApi
       self.data["FamilyHistory"]
     end
 
+    def immunizations
+      self.data["Immunizations"]
+    end
+
     def medications
       self.data["Medications"]
     end
