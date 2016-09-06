@@ -1,4 +1,35 @@
 module PatientHelper
+  def substance_name(allergy)
+    allergy["Substance"]["Name"].titlecase || ''
+  end
+
+  def reaction(allergy)
+    reaction_list = ''
+    reactions_array = allergy["Reaction"]
+
+    return 'Reaction is unavailable' if reactions_array.empty?
+
+    if reactions_array.count == 1
+      reaction_list = reactions_array.first["Name"]
+    else
+      reactions = []
+      reactions_array.each do | reaction | 
+        reactions << reaction["Name"]
+      end
+      reaction_list = reactions.join(', ')
+    end
+
+    reaction_list
+  end
+
+  def severity(allergy)
+    allergy["Severity"]["Name"].titlecase || 'Severity is unavailable'
+  end
+
+  def allergy_status(allergy)
+    allergy["Status"]["Name"].titlecase || 'Status is unavailable'
+  end
+
   def age_at_onset(problem)
     return 'Unavailable'if problem["AgeAtOnset"].blank?
     problem["AgeAtOnset"]
