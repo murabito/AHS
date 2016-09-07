@@ -56,6 +56,10 @@ module RedoxApi
       self.data["Problems"]
     end
 
+    def results
+      self.data["Results"]
+    end
+
     def social_history_observations
       self.data["SocialHistory"]["Observations"]
     end

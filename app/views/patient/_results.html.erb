@@ -1,0 +1,25 @@
+<% @clinical_summary.results.each do | result | %>
+  <div class="padding-bottom-10">
+    <table>
+      <tbody>
+        <thead>
+          <tr>
+            <td class="three-fourth">
+              <div class="padding-bottom-10"><%= result["Name"] %></div>
+              <br />
+              Chemistries and drug levels
+            </td>
+            <td class="one-fourth"></td>
+          </tr>
+        </thead>
+
+        <% result["Observations"].each do | observation | %>
+          <tr>
+            <td class="three-fourth"><%= observation["Name"] %></td>
+            <td class="one-fourth"><%= result_value_str(observation) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+   </table>
+  </div>
+<% end %>
