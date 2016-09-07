@@ -68,6 +68,11 @@ module PatientHelper
     end
   end
 
+  def result_value_str(observation)
+    return 'Result is unavailable' if observation["Value"].empty?
+    observation["Value"] + ' ' + observation["Units"] 
+  end
+
   def height(vital_sign_group)
     observations = vital_sign_group["Observations"]
     height = observations.select { | vital_sign | vital_sign["Code"] == "8302-2" }.first
