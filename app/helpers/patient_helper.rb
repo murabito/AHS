@@ -56,9 +56,9 @@ module PatientHelper
     effective_dates
   end
 
-  def product_name(medication)
-    return '' if medication["Product"]["Name"].blank?
-    medication["Product"]["Name"].capitalize
+  def product_name(data)
+    return '' if data["Product"]["Name"].blank?
+    data["Product"]["Name"].capitalize
   end
 
   def directions(medication)

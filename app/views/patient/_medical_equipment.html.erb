@@ -1,0 +1,17 @@
+<table>
+  <tbody>
+    <thead>
+      <tr>
+        <td class="three-fourth">Supply / Device</td>
+        <td class="one-fourth">Date Supplied</td>
+      </tr>
+    </thead>
+
+    <% @clinical_summary.medical_equipment.each do | equipment | %>
+      <tr>
+        <td class="three-fourth"><%= product_name(equipment)  %></td>
+        <td class="one-fourth"><%= equipment["StartDate"].blank? ? '--' : formatted_date(equipment["StartDate"]) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

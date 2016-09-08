@@ -24,6 +24,10 @@ module RedoxApi
       self.data["Immunizations"]
     end
 
+    def medical_equipment
+      self.data["MedicalEquipment"]
+    end
+
     def medications
       self.data["Medications"]
     end
