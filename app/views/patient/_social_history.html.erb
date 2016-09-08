@@ -11,7 +11,7 @@
     <% @clinical_summary.social_history_observations.each do | observation | %>
       <tr>
         <td class="one-third">Observation</td>
-        <td class="one-third"><%= observation["Name"].capitalize %></td>
+        <td class="one-third"><%= formatted_name_str(observation) %></td>
         <td class="one-third"><%= formatted_date(observation["StartDate"]) %></td>
       </tr>
     <% end %>
@@ -28,7 +28,7 @@
       <% observation["EndDate"] = '2016-07-25' %>
       <tr>
         <td class="one-third">Tobacco Use</td>
-        <td class="one-third"><%= observation["Name"].capitalize %></td>
+        <td class="one-third"><%= formatted_name_str(observation) %></td>
         <td class="one-third"><%= effective_date_str(observation["StartDate"], observation["EndDate"]) %>
         </td>
       </tr>
