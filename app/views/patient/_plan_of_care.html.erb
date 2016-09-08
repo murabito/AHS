@@ -30,7 +30,7 @@
 
     <% @clinical_summary.plan_of_care_medication.each do | medication | %>
       <tr>
-        <td class="three-fourth"><%= medication["Product"]["Name"].capitalize  %></td>
+        <td class="three-fourth"><%= product_name(medication)  %></td>
         <td class="one-fourth"><%= medication["StartDate"].blank? ? '--' : formatted_date(medication["StartDate"]) %></td>
       </tr>
     <% end %>

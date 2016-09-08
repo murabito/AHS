@@ -78,9 +78,9 @@ module PatientHelper
     end
   end
 
-  def formatted_name_str(problem)
-    return '' if problem["Name"].blank?
-    problem["Name"].capitalize
+  def formatted_name_str(data)
+    return '' if data["Name"].blank?
+    data["Name"].capitalize
   end
 
   def formatted_status_str(problem)
