@@ -56,6 +56,16 @@ module PatientHelper
     effective_dates
   end
 
+  def product_name(medication)
+    return '' if medication["Product"]["Name"].blank?
+    medication["Product"]["Name"].capitalize
+  end
+
+  def directions(medication)
+    return '' if medication["FreeTextSig"].blank?
+    medication["FreeTextSig"].capitalize
+  end
+
   def status(medication)
     return 'Status is unavailable' if medication["EndDate"].blank?
 
@@ -66,6 +76,16 @@ module PatientHelper
     else
       return 'Inactive'
     end
+  end
+
+  def formatted_name_str(problem)
+    return '' if problem["Name"].blank?
+    problem["Name"].capitalize
+  end
+
+  def formatted_status_str(problem)
+    return 'Status is unavailable' if problem["Status"]["Name"].blank?
+    problem["Status"]["Name"].capitalize
   end
 
   def result_value_str(observation)

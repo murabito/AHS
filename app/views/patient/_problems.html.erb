@@ -9,8 +9,8 @@
 
     <% @clinical_summary.problems.each do | problem | %>
       <tr>
-        <td class="three-fourth"><%= problem["Name"].capitalize %></td>
-        <td class="one-fourth"><%= problem["Status"]["Name"].capitalize %></td>
+        <td class="three-fourth"><%= formatted_name_str(problem) %></td>
+        <td class="one-fourth"><%= formatted_status_str(problem) %></td>
       </tr>
     <% end %>
   </tbody>
