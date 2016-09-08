@@ -16,6 +16,10 @@ module RedoxApi
       self.data["Allergies"]
     end
 
+    def encounters
+      self.data["Encounters"]
+    end
+
     def family_history
       self.data["FamilyHistory"]
     end
@@ -58,6 +62,10 @@ module RedoxApi
 
     def problems
       self.data["Problems"]
+    end
+
+    def procedures
+      self.data["Procedures"]
     end
 
     def results
