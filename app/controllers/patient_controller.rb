@@ -6,7 +6,7 @@ class PatientController < ApplicationController
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
 
-    if successful_response?(response)
+    if successful_response?(response) && successful_response?(response)
       flash.clear
 
       @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
@@ -27,7 +27,7 @@ class PatientController < ApplicationController
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_data)
 
-    if successful_response?(response) && successful_query?(response)
+    if successful_query?(response)
       flash.clear
       @patient = RedoxApi::Patient.new(response.data["Patient"])
       redirect_to patient_path(patient_id: @patient.id)
@@ -46,7 +46,8 @@ class PatientController < ApplicationController
         "Test": true,
         "Destinations": [
           {
-            
+            "ID": "0f4bd1d1-451d-4351-8cfd-b767d1b488d6",
+            "Name": "Patient Search Endpoint"
           }
         ]
       },
