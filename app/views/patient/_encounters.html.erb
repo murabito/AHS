@@ -1,0 +1,78 @@
+<% encounters = [
+      {
+         "Type": {
+            "Code": "99222",
+            "CodeSystem": "2.16.840.1.113883.6.12",
+            "CodeSystemName": "CPT",
+            "Name": "InPatient Admission"
+         },
+         "DateTime": "2012-08-06T04:00:00.000Z",
+         "Providers": [
+            {
+               "Role": {
+                  "Code": "59058001",
+                  "CodeSystem": "2.16.840.1.113883.6.96",
+                  "CodeSystemName": "SNOMED CT",
+                  "Name": "General Physician"
+               }
+            }
+         ],
+         "Locations": [
+            {
+               "Address": {
+                  "StreetAddress": "1002 Healthcare Dr",
+                  "City": "Portland",
+                  "State": "OR",
+                  "Country": "US",
+                  "ZIP": "97266"
+               },
+               "Type": {
+                  "Code": "1160-1",
+                  "CodeSystem": "2.16.840.1.113883.6.259",
+                  "CodeSystemName": "HealthcareServiceLocation",
+                  "Name": "Urgent Care Center"
+               },
+               "Name": "Community Health and Hospitals"
+            }
+         ],
+         "Diagnosis": [
+            {
+               "Code": "233604007",
+               "CodeSystem": "2.16.840.1.113883.6.96",
+               "CodeSystemName": "SNOMED CT",
+               "Name": "Pneumonia"
+            }
+         ],
+         "ReasonForVisit": [
+            {
+               "Code": "233604007",
+               "CodeSystem": "2.16.840.1.113883.6.96",
+               "CodeSystemName": "SNOMED CT",
+               "Name": "Pneumonia"
+            }
+         ]
+      }
+   ]
+ %>
+
+<table>
+  <tbody>
+    <thead>
+      <tr>
+        <td class="one-fourth">Encounter</td>
+        <td class="one-fourth">Performer</td>
+        <td class="one-fourth">Location</td>
+        <td class="one-fourth">Date</td>
+      </tr>
+    </thead>
+
+    <% encounters.each do | encounter | %>
+      <tr>
+        <td class="one-fourth"><%= reason_for_visit(encounter) %></td>
+        <td class="one-fourth"><%= performer(encounter) %></td>
+        <td class="one-fourth"><%=  %></td>
+        <td class="one-fourth"><%= formatted_date(encounter["DateTime"]) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

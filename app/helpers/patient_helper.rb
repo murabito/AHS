@@ -23,11 +23,42 @@ module PatientHelper
   end
 
   def severity(allergy)
-    allergy["Severity"]["Name"].titlecase || 'Severity is unavailable'
+    return 'Severity is unavailable' if allergy["Severity"]["Name"].blank?
+    allergy["Severity"]["Name"].titlecase
   end
 
   def allergy_status(allergy)
-    allergy["Status"]["Name"].titlecase || 'Status is unavailable'
+    return 'Status is unavailable' if allergy["Status"]["Name"].blank?
+    allergy["Status"]["Name"].titlecase
+  end
+
+  def reason_for_visit(encounter)
+    binding.pry
+    return 'Reason for visit is unavailable' if encounter["ReasonForVisit"].blank?
+
+    if encounter["ReasonForVisit"].count == 1
+      return encounter["ReasonForVisit"].first["Name"]
+    else
+      reason_list = []
+      encounter["ReasonForVisit"].each do | reason |
+        reason_list << reason["Name"]
+      end
+    end
+    reason_list.join(', ')
+  end
+
+  def performer(encounter)
+    return 'Unavailable' if encounter["Providers"].blank?
+
+    if encounter["Providers"].count == 1
+      return encounter["Providers"].first["Role"]["Name"]
+    else
+      performer_list = []
+      encounter["Providers"].each do | provider |
+        performer_list << provider["Role"]["Name"]
+      end
+    end
+    performer_list.join(', ')
   end
 
   def age_at_onset(problem)
