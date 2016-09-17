@@ -41,6 +41,7 @@ class PatientController < ApplicationController
   end
 
   def save_patient(patient_data)
+    return if patient_exists?(patient_data)
     patient = Patient.new
     patient.nist_id = patient_data.patient_id
     patient.ssn = patient_data.ssn
@@ -49,6 +50,16 @@ class PatientController < ApplicationController
     patient.first_name = patient_data.first_name
 
     patient.save
+  end
+
+  def patient_exists?(patient_data)
+    patient = Patient.find_by_nist_id(patient_data.patient_id)
+    return true if !!patient
+
+    patient = Patient.find_by_ssn(patient_data.ssn)
+    return true if !!patient
+
+    false
   end
 
   def patient_query_body_json
