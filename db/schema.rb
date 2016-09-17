@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160917203934) do
+ActiveRecord::Schema.define(version: 20160917220138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "clinical_summaries", force: :cascade do |t|
+    t.string   "document_id"
+    t.integer  "patient_id"
+    t.integer  "ehr_system_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "clinical_summaries", ["ehr_system_id"], name: "index_clinical_summaries_on_ehr_system_id", using: :btree
+  add_index "clinical_summaries", ["patient_id"], name: "index_clinical_summaries_on_patient_id", using: :btree
 
   create_table "ehr_systems", force: :cascade do |t|
     t.string   "redox_id"
@@ -61,6 +72,8 @@ ActiveRecord::Schema.define(version: 20160917203934) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "clinical_summaries", "ehr_systems"
+  add_foreign_key "clinical_summaries", "patients"
   add_foreign_key "recent_views", "ehr_systems"
   add_foreign_key "recent_views", "patients"
   add_foreign_key "recent_views", "users"
