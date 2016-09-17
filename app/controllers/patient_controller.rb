@@ -2,6 +2,8 @@ class PatientController < ApplicationController
   before_action :authenticate_user!
 
   def show
+    @patient = Patient.find_by_nist_id(params["patient_id"])
+
     clinical_summary_request_body = clinical_summary_body_json(params["patient_id"])
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
@@ -10,7 +12,9 @@ class PatientController < ApplicationController
       flash.clear
 
       @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
-      @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
+      # @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
+
+      save_to_recent_views(@clinical_summary, @patient)
     else
       flash.alert = "This patient's clinical summary was not successfully returned from this EHR. Please search again."
       render :search
@@ -21,8 +25,6 @@ class PatientController < ApplicationController
   end
 
   def retrieve
-    # ssn = params["ssn"]
-
     patient_search_data = patient_query_body_json
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_search_data)
@@ -44,10 +46,13 @@ class PatientController < ApplicationController
     return if patient_exists?(patient_data)
     patient = Patient.new
     patient.nist_id = patient_data.patient_id
-    patient.ssn = patient_data.ssn
-    patient.last_name = patient_data.last_name
-    patient.dob = patient_data.dob
-    patient.first_name = patient_data.first_name
+
+    # Pulling this data from clinical summary for now, as it is required / reliable
+
+    # patient.ssn = patient_data.ssn
+    # patient.last_name = patient_data.last_name
+    # patient.dob = patient_data.dob
+    # patient.first_name = patient_data.first_name
 
     patient.save
   end
@@ -60,6 +65,19 @@ class PatientController < ApplicationController
     return true if !!patient
 
     false
+  end
+
+  def save_to_recent_views(clinical_summary, patient)
+    recent_view = RecentView.new
+    recent_view.user_id = current_user.id
+
+    # TODO - Finds patient by nist id for now.
+    recent_view.patient_id = patient.id
+
+    # TODO - EHR system is hard coded for now. 
+    recent_view.ehr_system_id = 1
+
+    recent_view.save
   end
 
   def patient_query_body_json
