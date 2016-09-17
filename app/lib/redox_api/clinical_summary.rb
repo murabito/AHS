@@ -12,6 +12,81 @@ module RedoxApi
       self.data["Header"]["Document"]["ID"].upcase
     end
 
+    def last_name
+      self.data["Header"]["Patient"]["Demographics"]["LastName"].titlecase
+    end
+
+    def first_name
+      self.data["Header"]["Patient"]["Demographics"]["FirstName"].titlecase
+    end
+
+    def dob
+      Date.strptime(self.data["Header"]["Patient"]["Demographics"]["DOB"], '%Y-%m-%d')
+    end
+
+    def ssn
+      self.data["Header"]["Patient"]["Demographics"]["SSN"]
+    end
+
+    def sex
+      self.data["Header"]["Patient"]["Demographics"]["Sex"]
+    end
+
+    def street_address
+      self.data["Header"]["Patient"]["Demographics"]["Address"]["StreetAddress"]
+    end
+
+    def city
+      self.data["Header"]["Patient"]["Demographics"]["Address"]["City"]
+    end
+
+    def state
+      self.data["Header"]["Patient"]["Demographics"]["Address"]["State"]
+    end
+
+    def county
+      self.data["Header"]["Patient"]["Demographics"]["Address"]["County"]
+    end
+
+    def country
+      self.data["Header"]["Patient"]["Demographics"]["Address"]["Country"]
+    end
+
+    def zip
+      self.data["Header"]["Patient"]["Demographics"]["Address"]["ZIP"]
+    end
+
+    def home_phone
+      self.data["Header"]["Patient"]["Demographics"]["PhoneNumber"]["Home"]
+    end
+
+    def mobile_phone
+      self.data["Header"]["Patient"]["Demographics"]["PhoneNumber"]["Mobile"]
+    end
+
+    def email
+      email_array = self.data["Header"]["Patient"]["Demographics"]["EmailAddresses"]
+      email_list = email_array.first["Address"]
+
+      if email_array.count > 1
+        email_array.each { | address | email_list = email_list + ', ' + address["Address"] }
+      end
+
+      email_list
+    end
+
+    def race
+      self.data["Header"]["Patient"]["Demographics"]["Race"]
+    end
+
+    def ethnicity
+      self.data["Header"]["Patient"]["Demographics"]["Ethnicity"]
+    end
+
+    def marital_status
+      self.data["Header"]["Patient"]["Demographics"]["MaritalStatus"]
+    end
+
     def allergies
       self.data["Allergies"]
     end
