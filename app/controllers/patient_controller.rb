@@ -6,7 +6,7 @@ class PatientController < ApplicationController
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
 
-    if successful_response?(response) && successful_response?(response)
+    if successful_response?(response)
       flash.clear
 
       @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
@@ -27,7 +27,7 @@ class PatientController < ApplicationController
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_search_data)
 
-    if successful_query?(response)
+    if successful_response?(response) && successful_query?(response)
       flash.clear
 
       @patient = RedoxApi::Patient.new(response.data["Patient"])
