@@ -23,18 +23,32 @@ class PatientController < ApplicationController
   def retrieve
     # ssn = params["ssn"]
 
-    patient_data = patient_query_body_json
+    patient_search_data = patient_query_body_json
 
-    response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_data)
+    response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_search_data)
 
     if successful_query?(response)
       flash.clear
+
       @patient = RedoxApi::Patient.new(response.data["Patient"])
+      save_patient(@patient)
+      
       redirect_to patient_path(patient_id: @patient.id)
     else
       flash.alert = "This data did not return a succesful patient query. Please re-enter patient data."
       render :search
     end
+  end
+
+  def save_patient(patient_data)
+    patient = Patient.new
+    patient.nist_id = patient_data.patient_id
+    patient.ssn = patient_data.ssn
+    patient.last_name = patient_data.last_name
+    patient.dob = patient_data.dob
+    patient.first_name = patient_data.first_name
+
+    patient.save
   end
 
   def patient_query_body_json
@@ -91,7 +105,6 @@ class PatientController < ApplicationController
   end
 
   def successful_query?(response)
-    binding.pry
     !!response.data["Patient"]
   end
 
