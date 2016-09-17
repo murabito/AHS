@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160917221347) do
+ActiveRecord::Schema.define(version: 20160917222052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,11 +42,13 @@ ActiveRecord::Schema.define(version: 20160917221347) do
 
   create_table "recent_views", force: :cascade do |t|
     t.integer  "user_id"
-    t.boolean  "is_saved",   default: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.boolean  "is_saved",            default: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "clinical_summary_id"
   end
 
+  add_index "recent_views", ["clinical_summary_id"], name: "index_recent_views_on_clinical_summary_id", using: :btree
   add_index "recent_views", ["is_saved"], name: "index_recent_views_on_is_saved", using: :btree
   add_index "recent_views", ["user_id"], name: "index_recent_views_on_user_id", using: :btree
 
@@ -70,5 +72,6 @@ ActiveRecord::Schema.define(version: 20160917221347) do
 
   add_foreign_key "clinical_summaries", "ehr_systems"
   add_foreign_key "clinical_summaries", "patients"
+  add_foreign_key "recent_views", "clinical_summaries"
   add_foreign_key "recent_views", "users"
 end
