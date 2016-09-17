@@ -17,24 +17,22 @@ module RedoxApi
       end
       nist_id
     end
-
-    # Demographics info moved to clinical summary for now, at it is required / reliable
     
-    # def last_name
-    #   self.data["Demographics"]["LastName"].titlecase
-    # end
+    def last_name
+      self.data["Demographics"]["LastName"].titlecase
+    end
 
-    # def first_name
-    #   self.data["Demographics"]["FirstName"].titlecase
-    # end
+    def first_name
+      self.data["Demographics"]["FirstName"].titlecase
+    end
 
-    # def dob
-    #   Date.strptime(self.data["Demographics"]["DOB"], '%Y-%m-%d')
-    # end
+    def dob
+      Date.strptime(self.data["Demographics"]["DOB"], '%Y-%m-%d')
+    end
 
-    # def ssn
-    #   self.data["Demographics"]["SSN"]
-    # end
+    def ssn
+      self.data["Demographics"]["SSN"]
+    end
 
     # def sex
     #   self.data["Demographics"]["Sex"]

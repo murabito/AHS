@@ -54,10 +54,10 @@ class PatientController < ApplicationController
 
     # Pulling this data from clinical summary for now, as it is required / reliable
 
-    # patient.ssn = patient_data.ssn
-    # patient.last_name = patient_data.last_name
-    # patient.dob = patient_data.dob
-    # patient.first_name = patient_data.first_name
+    patient.ssn = patient_data.ssn
+    patient.last_name = patient_data.last_name
+    patient.dob = patient_data.dob
+    patient.first_name = patient_data.first_name
 
     patient.save
   end
