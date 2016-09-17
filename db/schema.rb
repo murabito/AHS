@@ -36,6 +36,10 @@ ActiveRecord::Schema.define(version: 20160917222052) do
 
   create_table "patients", force: :cascade do |t|
     t.string "nist_id"
+    t.string "dob"
+    t.string "ssn"
+    t.string "last_name"
+    t.string "first_name"
   end
 
   add_index "patients", ["nist_id"], name: "index_patients_on_nist_id", using: :btree
