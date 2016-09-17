@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160917220138) do
+ActiveRecord::Schema.define(version: 20160917221347) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,16 +42,12 @@ ActiveRecord::Schema.define(version: 20160917220138) do
 
   create_table "recent_views", force: :cascade do |t|
     t.integer  "user_id"
-    t.integer  "patient_id"
-    t.integer  "ehr_system_id"
-    t.boolean  "is_saved",      default: false
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.boolean  "is_saved",   default: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
-  add_index "recent_views", ["ehr_system_id"], name: "index_recent_views_on_ehr_system_id", using: :btree
   add_index "recent_views", ["is_saved"], name: "index_recent_views_on_is_saved", using: :btree
-  add_index "recent_views", ["patient_id"], name: "index_recent_views_on_patient_id", using: :btree
   add_index "recent_views", ["user_id"], name: "index_recent_views_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
@@ -74,7 +70,5 @@ ActiveRecord::Schema.define(version: 20160917220138) do
 
   add_foreign_key "clinical_summaries", "ehr_systems"
   add_foreign_key "clinical_summaries", "patients"
-  add_foreign_key "recent_views", "ehr_systems"
-  add_foreign_key "recent_views", "patients"
   add_foreign_key "recent_views", "users"
 end
