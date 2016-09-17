@@ -57,14 +57,8 @@ class PatientController < ApplicationController
     patient.save
   end
 
-  def patient_exists?(patient_data)
-    patient = Patient.find_by_nist_id(patient_data.patient_id)
-    return true if !!patient
-
-    patient = Patient.find_by_ssn(patient_data.ssn)
-    return true if !!patient
-
-    false
+  def patient_exists?(patient)
+    !!(Patient.find_by_nist_id(patient.id))
   end
 
   def save_to_recent_views(clinical_summary, patient)
