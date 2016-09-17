@@ -14,7 +14,8 @@ class PatientController < ApplicationController
       @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
       # @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
 
-      save_to_recent_views(@clinical_summary, @patient)
+      save_clinical_summary(@clinical_summary, @patient)
+      # save_to_recent_views(@clinical_summary)
     else
       flash.alert = "This patient's clinical summary was not successfully returned from this EHR. Please search again."
       render :search
@@ -42,6 +43,10 @@ class PatientController < ApplicationController
     end
   end
 
+  def patient_exists?(patient)
+    !!(Patient.find_by_nist_id(patient.id))
+  end
+
   def save_patient(patient_data)
     return if patient_exists?(patient_data)
     patient = Patient.new
@@ -57,19 +62,23 @@ class PatientController < ApplicationController
     patient.save
   end
 
-  def patient_exists?(patient)
-    !!(Patient.find_by_nist_id(patient.id))
-  end
+  def save_clinical_summary(clinical_summary_data, patient)
+    clinical_summary = ClinicalSummary.new
 
-  def save_to_recent_views(clinical_summary, patient)
-    recent_view = RecentView.new
-    recent_view.user_id = current_user.id
+    clinical_summary.document_id = clinical_summary_data.id
 
     # TODO - Finds patient by nist id for now.
-    recent_view.patient_id = patient.id
+    clinical_summary.patient_id = patient.id
 
     # TODO - EHR system is hard coded for now. 
-    recent_view.ehr_system_id = 1
+    clinical_summary.ehr_system_id = 1
+
+    clinical_summary.save
+  end
+
+  def save_to_recent_views(clinical_summary)
+    recent_view = RecentView.new
+    recent_view.user_id = current_user.id
 
     recent_view.save
   end
