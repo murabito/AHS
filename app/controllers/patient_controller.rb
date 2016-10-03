@@ -2,7 +2,7 @@ class PatientController < ApplicationController
   before_action :authenticate_user!
 
   def show
-    @patient = Patient.find_by_nist_id(params["patient_id"])
+    # @patient = Patient.find_by_nist_id(params["patient_id"])
 
     clinical_summary_request_body = clinical_summary_body_json(params["patient_id"])
 
@@ -12,9 +12,9 @@ class PatientController < ApplicationController
       flash.clear
 
       @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
-      # @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
+      @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
 
-      save_clinical_summary(@clinical_summary, @patient)
+      save_clinical_summary(@clinical_summary)
       save_to_recent_views(@clinical_summary)
     else
       flash.alert = "This patient's clinical summary was not successfully returned from this EHR. Please search again."
@@ -47,10 +47,20 @@ class PatientController < ApplicationController
     !!(Patient.find_by_nist_id(patient.id))
   end
 
+  def clinical_summary_exists?(clinical_summary)
+    !!(ClinicalSummary.find_by_document_id(clinical_summary.id))
+  end
+
+  def recent_view_exists(clinical_summary)
+    summary_id = ClinicalSummary.find_by_document_id(clinical_summary.id).id
+    !!(RecentView.where(clinical_summary_id: summary_id).first)
+  end
+
   def save_patient(patient_data)
     return if patient_exists?(patient_data)
     patient = Patient.new
-    patient.nist_id = patient_data.patient_id
+    # patient.nist_id = patient_data.patient_id
+    patient.nist_id = patient_data.id
 
     # Pulling this data from clinical summary for now, as it is required / reliable
 
@@ -62,13 +72,15 @@ class PatientController < ApplicationController
     patient.save
   end
 
-  def save_clinical_summary(clinical_summary_data, patient)
+  def save_clinical_summary(clinical_summary_data)
+    return if clinical_summary_exists?(clinical_summary_data)
+
     clinical_summary = ClinicalSummary.new
 
     clinical_summary.document_id = clinical_summary_data.id
 
     # TODO - Finds patient by nist id for now.
-    clinical_summary.patient_id = patient.id
+    clinical_summary.patient_id = Patient.find_by_nist_id(params["patient_id"]).id
 
     # TODO - EHR system is hard coded for now. 
     clinical_summary.ehr_system_id = 1
@@ -76,13 +88,26 @@ class PatientController < ApplicationController
     clinical_summary.save
   end
 
-  def save_to_recent_views(clinical_summary)
-    recent_view = RecentView.new
-    recent_view.user_id = current_user.id
+  def update_viewed_date(clinical_summary)
+    summary_id = ClinicalSummary.find_by_document_id(clinical_summary.id).id
 
-    recent_view.clinical_summary_id = ClinicalSummary.find_by_document_id(clinical_summary.id).id
-
+    recent_view = RecentView.where(clinical_summary_id: summary_id).first
+    
+    recent_view.updated_at = DateTime.now
     recent_view.save
+  end
+
+  def save_to_recent_views(clinical_summary)
+    if recent_view_exists(clinical_summary)
+      update_viewed_date(clinical_summary)
+    else
+      recent_view = RecentView.new
+      recent_view.user_id = current_user.id
+
+      recent_view.clinical_summary_id = ClinicalSummary.find_by_document_id(clinical_summary.id).id
+
+      recent_view.save
+    end
   end
 
   def patient_query_body_json
