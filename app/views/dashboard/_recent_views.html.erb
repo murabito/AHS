@@ -1,28 +1,33 @@
 <section class="table-container">
   <h2>Recent Patient Views</h2>
 
-  <table>
-    <thead>
-      <tr>
-        <td><input type="checkbox" name=""></td>
-        <td>Chart ID</td>
-        <td>Last Name</td>
-        <td>First Name</td>
-        <td>EHR Source</td>
-      </tr>
-    </thead>
-    <tbody>
-      <% @recent_views.each do | recent_view | %>
+  <% if @recent_views.count > 0 %>
+    <table>
+      <thead>
         <tr>
           <td><input type="checkbox" name=""></td>
-          <td><a href="<%= patient_path(patient_id: recent_view.clinical_summary.patient.nist_id) %>"><%= recent_view.clinical_summary.document_id %></a></td>
-          <td><%= recent_view.clinical_summary.patient.last_name %></td>
-          <td><%= recent_view.clinical_summary.patient.first_name %></td>
-          <td><%= recent_view.clinical_summary.ehr_system.name %></td>
+          <td>Chart ID</td>
+          <td>Last Name</td>
+          <td>First Name</td>
+          <td>EHR Source</td>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @recent_views.each do | recent_view | %>
+          <tr>
+            <td><input type="checkbox" name=""></td>
+            <td><a href="<%= patient_path(patient_id: recent_view.clinical_summary.patient.nist_id) %>"><%= recent_view.clinical_summary.document_id %></a></td>
+            <td><%= recent_view.clinical_summary.patient.last_name %></td>
+            <td><%= recent_view.clinical_summary.patient.first_name %></td>
+            <td><%= recent_view.clinical_summary.ehr_system.name %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-  <h4><a href="#">Show More Results</a></h4>
+    <h4><a href="#">Show More Results</a></h4>
+
+  <% else %>
+    <p>You do not have any recent views yet.</p>
+  <% end %>
 </section>
