@@ -3,6 +3,8 @@
 
     <h2>Patient Detail - Chart ID <%= @clinical_summary.id %>: <%= @clinical_summary.last_name %>, <%= @clinical_summary.first_name %> [NYU Langone Medical Center]</h2>
 
+    <%= button_to toggle_saved_view_text(@clinical_summary.id), save_view_path, params: { summary_id: @clinical_summary.id } %>
+
     <ul class="info-links">
       <li><%= link_to 'Demographics', '#demographics' %></li>
       <li><%= link_to 'Allergies', '#allergies' %></li>

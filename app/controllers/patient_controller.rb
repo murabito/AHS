@@ -22,6 +22,21 @@ class PatientController < ApplicationController
     end
   end
 
+  def save_view
+    summary_id = ClinicalSummary.find_by_document_id(params["summary_id"]).id
+    recent_view = RecentView.where(clinical_summary_id: summary_id).first
+    
+    if recent_view.is_saved
+      recent_view.is_saved = false
+      recent_view.save
+    else
+      recent_view.is_saved = true
+      recent_view.save
+    end
+
+    redirect_to '/'
+  end
+
   def search
   end
 
