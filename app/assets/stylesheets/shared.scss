@@ -117,12 +117,6 @@ body > header h1 {
   color: #37474f;
 }
 
-.button {
-  display: block;
-  padding: 20px;
-  border-radius: 5px;
-}
-
 .alert, .notice {
   padding: 10px 20px 0 20px;
   text-align: center;
@@ -166,12 +160,16 @@ input[type="email"], .login input[type="password"], input[type="text"] {
 }
 
 .button {
+  display: block;
+  margin: 10px 0 0 0;
   padding: 10px 20px;
   font-size: 1.25em;
+  letter-spacing: 1.25px;
   background: #ffffff;
-  border: 1px solid #6c757a;
   color: #6c757a;
-  text-transform: uppercase;
+  border: 1px solid #6c757a;
+  border-radius: 5px;
+  text-transform: capitalize;
 }
 
 .button:focus {
