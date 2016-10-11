@@ -1,7 +1,9 @@
 <main id="patient-detail">
   <div class="column">
 
-    <h2>Patient Detail - Chart ID <%= @clinical_summary.id %>: <%= @patient.last_name %>, <%= @patient.first_name %> [NYU Langone Medical Center]</h2>
+    <h2>Patient Detail - Chart ID <%= @clinical_summary.id %>: <%= @clinical_summary.last_name %>, <%= @clinical_summary.first_name %> [NYU Langone Medical Center]</h2>
+
+    <%= button_to toggle_saved_view_text(@clinical_summary.id), save_view_path, class: 'button', params: { summary_id: @clinical_summary.id } %>
 
     <ul class="info-links">
       <li><%= link_to 'Demographics', '#demographics' %></li>

@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   get 'retrieve-patient', to: 'patient#retrieve'
 
   get 'patient', to: 'patient#show', as: :patient
+
+  post '/save_view', to: "patient#save_view", as: 'save_view'
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

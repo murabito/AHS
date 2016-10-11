@@ -2,38 +2,126 @@ class PatientController < ApplicationController
   before_action :authenticate_user!
 
   def show
+    # @patient = Patient.find_by_nist_id(params["patient_id"])
+
     clinical_summary_request_body = clinical_summary_body_json(params["patient_id"])
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
 
-    if successful_response?(response)
+    if successful_response?(response) && successful_clinical_summary_query?(response)
       flash.clear
 
       @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
       @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
+
+      save_clinical_summary(@clinical_summary)
+      save_to_recent_views(@clinical_summary)
     else
       flash.alert = "This patient's clinical summary was not successfully returned from this EHR. Please search again."
       render :search
     end
   end
 
+  def save_view
+    summary_id = ClinicalSummary.find_by_document_id(params["summary_id"]).id
+    recent_view = RecentView.where(clinical_summary_id: summary_id).first
+    
+    if recent_view.is_saved
+      recent_view.is_saved = false
+      recent_view.save
+    else
+      recent_view.is_saved = true
+      recent_view.save
+    end
+
+    redirect_to '/'
+  end
+
   def search
   end
 
   def retrieve
-    # ssn = params["ssn"]
+    patient_search_data = patient_query_body_json
 
-    patient_data = patient_query_body_json
+    response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_search_data)
 
-    response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_data)
-
-    if successful_query?(response)
+    if successful_response?(response) && successful_patient_query?(response)
       flash.clear
+
       @patient = RedoxApi::Patient.new(response.data["Patient"])
+      save_patient(@patient)
+      
       redirect_to patient_path(patient_id: @patient.id)
     else
       flash.alert = "This data did not return a succesful patient query. Please re-enter patient data."
       render :search
+    end
+  end
+
+  def patient_exists?(patient)
+    !!(Patient.find_by_nist_id(patient.id))
+  end
+
+  def clinical_summary_exists?(clinical_summary)
+    !!(ClinicalSummary.find_by_document_id(clinical_summary.id))
+  end
+
+  def recent_view_exists(clinical_summary)
+    summary_id = ClinicalSummary.find_by_document_id(clinical_summary.id).id
+    !!(RecentView.where(clinical_summary_id: summary_id).first)
+  end
+
+  def save_patient(patient_data)
+    return if patient_exists?(patient_data)
+    patient = Patient.new
+    # patient.nist_id = patient_data.patient_id
+    patient.nist_id = patient_data.id
+
+    # Pulling this data from clinical summary for now, as it is required / reliable
+
+    patient.ssn = patient_data.ssn
+    patient.last_name = patient_data.last_name
+    patient.dob = patient_data.dob
+    patient.first_name = patient_data.first_name
+
+    patient.save
+  end
+
+  def save_clinical_summary(clinical_summary_data)
+    return if clinical_summary_exists?(clinical_summary_data)
+
+    clinical_summary = ClinicalSummary.new
+
+    clinical_summary.document_id = clinical_summary_data.id
+
+    # TODO - Finds patient by nist id for now.
+    clinical_summary.patient_id = Patient.find_by_nist_id(params["patient_id"]).id
+
+    # TODO - EHR system is hard coded for now. 
+    clinical_summary.ehr_system_id = 1
+
+    clinical_summary.save
+  end
+
+  def update_viewed_date(clinical_summary)
+    summary_id = ClinicalSummary.find_by_document_id(clinical_summary.id).id
+
+    recent_view = RecentView.where(clinical_summary_id: summary_id).first
+    
+    recent_view.updated_at = DateTime.now
+    recent_view.save
+  end
+
+  def save_to_recent_views(clinical_summary)
+    if recent_view_exists(clinical_summary)
+      update_viewed_date(clinical_summary)
+    else
+      recent_view = RecentView.new
+      recent_view.user_id = current_user.id
+
+      recent_view.clinical_summary_id = ClinicalSummary.find_by_document_id(clinical_summary.id).id
+
+      recent_view.save
     end
   end
 
@@ -90,8 +178,12 @@ class PatientController < ApplicationController
     body = body.to_json
   end
 
-  def successful_query?(response)
+  def successful_patient_query?(response)
     !!response.data["Patient"]
+  end
+  
+  def successful_clinical_summary_query?(response)
+    !!response.data["Header"]["Document"]
   end
 
   def successful_response?(response)
