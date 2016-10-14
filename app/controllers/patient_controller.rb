@@ -24,7 +24,7 @@ class PatientController < ApplicationController
 
   def save_view
     summary_id = ClinicalSummary.find_by_document_id(params["summary_id"]).id
-    recent_view = RecentView.where(clinical_summary_id: summary_id).first
+    recent_view = RecentView.where(clinical_summary_id: summary_id).where(user_id: current_user.id).first
     
     if recent_view.is_saved
       recent_view.is_saved = false
