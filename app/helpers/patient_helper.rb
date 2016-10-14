@@ -1,8 +1,10 @@
 module PatientHelper
   def toggle_saved_view_text(document_id)
     summary_id = ClinicalSummary.find_by_document_id(document_id).id
-    recent_view = RecentView.where(clinical_summary_id: summary_id).first
-
+    recent_view = RecentView.where(clinical_summary_id: summary_id).where(user_id: current_user.id).first
+    
+    return if !recent_view
+    
     if recent_view.is_saved
       'Remove From Saved Views'
     else
