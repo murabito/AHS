@@ -68,7 +68,7 @@ class PatientController < ApplicationController
 
   def recent_view_exists(clinical_summary)
     summary_id = ClinicalSummary.find_by_document_id(clinical_summary.id).id
-    !!(RecentView.where(clinical_summary_id: summary_id).first)
+    !!(RecentView.where(clinical_summary_id: summary_id).where(user_id: current_user.id).first)
   end
 
   def save_patient(patient_data)
@@ -106,7 +106,7 @@ class PatientController < ApplicationController
   def update_viewed_date(clinical_summary)
     summary_id = ClinicalSummary.find_by_document_id(clinical_summary.id).id
 
-    recent_view = RecentView.where(clinical_summary_id: summary_id).first
+    recent_view = RecentView.where(clinical_summary_id: summary_id).where(user_id: current_user.id).first
     
     recent_view.updated_at = DateTime.now
     recent_view.save
