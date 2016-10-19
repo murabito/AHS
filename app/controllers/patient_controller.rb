@@ -14,6 +14,8 @@ class PatientController < ApplicationController
       @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
       @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
 
+      binding.pry
+
       save_clinical_summary(@clinical_summary)
       save_to_recent_views(@clinical_summary)
     else
@@ -40,6 +42,9 @@ class PatientController < ApplicationController
   def search
   end
 
+  def search_results
+  end
+
   def retrieve
     patient_search_data = patient_query_body_json
 
@@ -50,7 +55,7 @@ class PatientController < ApplicationController
 
       @patient = RedoxApi::Patient.new(response.data["Patient"])
       save_patient(@patient)
-      
+
       redirect_to patient_path(patient_id: @patient.id)
     else
       flash.alert = "This data did not return a succesful patient query. Please re-enter patient data."
