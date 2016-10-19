@@ -1,5 +1,27 @@
 <main id="patient-search">
   <h2>Patient Search Results</h2>
 
-  
+  <table>
+    <thead>
+      <tr>
+        <td><input type="checkbox" name=""></td>
+        <td>Chart ID</td>
+        <td>Last Name</td>
+        <td>First Name</td>
+        <td>EHR Source</td>
+      </tr>
+    </thead>
+    <tbody>
+      <% @clinical_summaries.each do | clinical_summary | %>
+        <tr>
+          <td><input type="checkbox" name=""></td>
+          <td><a href="<%= patient_path(patient_id: clinical_summary.patient.nist_id) %>"><%= clinical_summary.document_id %></a></td>
+          <td><%= clinical_summary.patient.last_name %></td>
+          <td><%= clinical_summary.patient.first_name %></td>
+          <td><%= clinical_summary.ehr_system.name %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
 </main>

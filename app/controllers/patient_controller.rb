@@ -1,6 +1,11 @@
 class PatientController < ApplicationController
   before_action :authenticate_user!
 
+  def search_results
+    patient_id = Patient.find_by_nist_id(params["patient_id"]).id
+    @clinical_summaries = ClinicalSummary.where(patient_id: patient_id)
+  end
+
   def show
     # @patient = Patient.find_by_nist_id(params["patient_id"])
 
@@ -13,8 +18,6 @@ class PatientController < ApplicationController
 
       @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
       @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
-
-      binding.pry
 
       save_clinical_summary(@clinical_summary)
       save_to_recent_views(@clinical_summary)
@@ -42,9 +45,6 @@ class PatientController < ApplicationController
   def search
   end
 
-  def search_results
-  end
-
   def retrieve
     patient_search_data = patient_query_body_json
 
@@ -56,7 +56,7 @@ class PatientController < ApplicationController
       @patient = RedoxApi::Patient.new(response.data["Patient"])
       save_patient(@patient)
 
-      redirect_to patient_path(patient_id: @patient.id)
+      redirect_to search_results_path(patient_id: @patient.id)
     else
       flash.alert = "This data did not return a succesful patient query. Please re-enter patient data."
       render :search
