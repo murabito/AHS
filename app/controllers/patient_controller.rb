@@ -46,7 +46,9 @@ class PatientController < ApplicationController
   end
 
   def retrieve
-    patient_search_data = patient_query_body_json("0f4bd1d1-451d-4351-8cfd-b767d1b488d6", "Patient Search Endpoint")
+    ehr_system = EhrSystem.first
+
+    patient_search_data = patient_query_body_json(ehr_system.redox_id, ehr_system.name)
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_search_data)
 
