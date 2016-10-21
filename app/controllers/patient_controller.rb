@@ -46,7 +46,7 @@ class PatientController < ApplicationController
   end
 
   def retrieve
-    patient_search_data = patient_query_body_json
+    patient_search_data = patient_query_body_json("0f4bd1d1-451d-4351-8cfd-b767d1b488d6", "Patient Search Endpoint")
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_search_data)
 
@@ -130,7 +130,7 @@ class PatientController < ApplicationController
     end
   end
 
-  def patient_query_body_json
+  def patient_query_body_json(destination_id, destination_name)
     body = {
       "Meta": {
         "DataModel": "PatientSearch",
@@ -139,8 +139,8 @@ class PatientController < ApplicationController
         "Test": true,
         "Destinations": [
           {
-            "ID": "0f4bd1d1-451d-4351-8cfd-b767d1b488d6",
-            "Name": "Patient Search Endpoint"
+            "ID": destination_id,
+            "Name": destination_name
           }
         ]
       },
