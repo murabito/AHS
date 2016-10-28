@@ -19,7 +19,7 @@ class PatientController < ApplicationController
       @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
       @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
 
-      save_clinical_summary(@clinical_summary)
+      # save_clinical_summary(@clinical_summary)
       save_to_recent_views(@clinical_summary)
     else
       flash.alert = "This patient's clinical summary was not successfully returned from this EHR. Please search again."
@@ -46,31 +46,56 @@ class PatientController < ApplicationController
   end
 
   def retrieve
-    ehr_system = EhrSystem.first
+    ehr_systems = EhrSystem.all 
 
-    patient_search_data = patient_query_body_json(ehr_system.redox_id, ehr_system.name)
+    ehr_systems.each do | ehr_system |
 
-    response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_search_data)
+      patient_search_data = patient_query_body_json(ehr_system.redox_id, ehr_system.name)
 
-    if successful_response?(response) && successful_patient_query?(response)
-      flash.clear
+      response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_search_data)
 
-      @patient = RedoxApi::Patient.new(response.data["Patient"])
-      save_patient(@patient)
+      if successful_response?(response) && successful_patient_query?(response)
+        flash.clear
 
-      redirect_to search_results_path(patient_id: @patient.id)
-    else
-      flash.alert = "This data did not return a succesful patient query. Please re-enter patient data."
-      render :search
+        @patient = RedoxApi::Patient.new(response.data["Patient"])
+        save_patient(@patient)
+      end
+
+      clinical_summary_request_body = clinical_summary_body_json(@patient.id)
+
+      response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
+
+      if successful_response?(response) && successful_clinical_summary_query?(response)
+        # flash.clear
+
+        @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
+        # @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
+
+        save_clinical_summary(@clinical_summary, @patient.id, ehr_system.id)
+      end
+
+    # if successful_response?(response) && successful_patient_query?(response)
+    #   flash.clear
+
+    #   @patient = RedoxApi::Patient.new(response.data["Patient"])
+    #   save_patient(@patient)
+
+    #   redirect_to search_results_path(patient_id: @patient.id)
+    # else
+    #   flash.alert = "This data did not return a succesful patient query. Please re-enter patient data."
+    #   render :search
+    # end
     end
+
+    redirect_to search_results_path(patient_id: @patient.id)
   end
 
   def patient_exists?(patient)
     !!(Patient.find_by_nist_id(patient.id))
   end
 
-  def clinical_summary_exists?(clinical_summary)
-    !!(ClinicalSummary.find_by_document_id(clinical_summary.id))
+  def clinical_summary_exists?(clinical_summary, ehr_id)
+    !!(ClinicalSummary.where(document_id: clinical_summary.id).where(ehr_system_id: ehr_id).first)
   end
 
   def recent_view_exists(clinical_summary)
@@ -94,18 +119,17 @@ class PatientController < ApplicationController
     patient.save
   end
 
-  def save_clinical_summary(clinical_summary_data)
-    return if clinical_summary_exists?(clinical_summary_data)
+  def save_clinical_summary(clinical_summary_data, patient_id, ehr_id)
+    return if clinical_summary_exists?(clinical_summary_data, ehr_id)
 
     clinical_summary = ClinicalSummary.new
 
     clinical_summary.document_id = clinical_summary_data.id
 
     # TODO - Finds patient by nist id for now.
-    clinical_summary.patient_id = Patient.find_by_nist_id(params["patient_id"]).id
+    clinical_summary.patient_id = Patient.find_by_nist_id(patient_id).id
 
-    # TODO - EHR system is hard coded for now. 
-    clinical_summary.ehr_system_id = 1
+    clinical_summary.ehr_system_id = ehr_id
 
     clinical_summary.save
   end
