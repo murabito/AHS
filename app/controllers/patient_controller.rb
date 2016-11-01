@@ -1,6 +1,54 @@
 class PatientController < ApplicationController
   before_action :authenticate_user!
 
+  def search
+  end
+
+  def retrieve
+    ehr_systems = EhrSystem.all 
+
+    ehr_systems.each do | ehr_system |
+
+      patient_search_request_body = patient_query_body_json(ehr_system.redox_id, ehr_system.name)
+
+      response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_search_request_body)
+
+      if successful_patient_query?(response)
+        flash.clear
+
+        @patient = RedoxApi::Patient.new(response.data["Patient"])
+        save_patient(@patient)
+      end
+
+      clinical_summary_request_body = clinical_summary_body_json(ehr_system.redox_id, ehr_system.name, @patient.id)
+
+      response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
+
+      if successful_clinical_summary_query?(response)
+        # flash.clear
+
+        @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
+        # @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
+
+        save_clinical_summary(@clinical_summary, @patient.id, ehr_system.id)
+      end
+
+    # if successful_response?(response) && successful_patient_query?(response)
+    #   flash.clear
+
+    #   @patient = RedoxApi::Patient.new(response.data["Patient"])
+    #   save_patient(@patient)
+
+    #   redirect_to search_results_path(patient_id: @patient.id)
+    # else
+    #   flash.alert = "This data did not return a succesful patient query. Please re-enter patient data."
+    #   render :search
+    # end
+    end
+
+    redirect_to search_results_path(patient_id: @patient.id)
+  end
+
   def search_results
     patient_id = Patient.find_by_nist_id(params["patient_id"]).id
     @clinical_summaries = ClinicalSummary.where(patient_id: patient_id)
@@ -13,7 +61,7 @@ class PatientController < ApplicationController
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
 
-    if successful_response?(response) && successful_clinical_summary_query?(response)
+    if successful_clinical_summary_query?(response)
       flash.clear
 
       @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
@@ -42,54 +90,6 @@ class PatientController < ApplicationController
     redirect_to '/'
   end
 
-  def search
-  end
-
-  def retrieve
-    ehr_systems = EhrSystem.all 
-
-    ehr_systems.each do | ehr_system |
-
-      patient_search_data = patient_query_body_json(ehr_system.redox_id, ehr_system.name)
-
-      response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_search_data)
-
-      if successful_response?(response) && successful_patient_query?(response)
-        flash.clear
-
-        @patient = RedoxApi::Patient.new(response.data["Patient"])
-        save_patient(@patient)
-      end
-
-      clinical_summary_request_body = clinical_summary_body_json(@patient.id)
-
-      response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
-
-      if successful_response?(response) && successful_clinical_summary_query?(response)
-        # flash.clear
-
-        @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
-        # @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
-
-        save_clinical_summary(@clinical_summary, @patient.id, ehr_system.id)
-      end
-
-    # if successful_response?(response) && successful_patient_query?(response)
-    #   flash.clear
-
-    #   @patient = RedoxApi::Patient.new(response.data["Patient"])
-    #   save_patient(@patient)
-
-    #   redirect_to search_results_path(patient_id: @patient.id)
-    # else
-    #   flash.alert = "This data did not return a succesful patient query. Please re-enter patient data."
-    #   render :search
-    # end
-    end
-
-    redirect_to search_results_path(patient_id: @patient.id)
-  end
-
   def patient_exists?(patient)
     !!(Patient.find_by_nist_id(patient.id))
   end
@@ -98,18 +98,16 @@ class PatientController < ApplicationController
     !!(ClinicalSummary.where(document_id: clinical_summary.id).where(ehr_system_id: ehr_id).first)
   end
 
-  def recent_view_exists(clinical_summary)
-    summary_id = ClinicalSummary.find_by_document_id(clinical_summary.id).id
+  def recent_view_exists(clinical_summary, ehr_id)
+    summary_id = ClinicalSummary.where(document_id: clinical_summary.id).where(ehr_system_id: ehr_id).first.id
+
     !!(RecentView.where(clinical_summary_id: summary_id).where(user_id: current_user.id).first)
   end
 
   def save_patient(patient_data)
     return if patient_exists?(patient_data)
     patient = Patient.new
-    # patient.nist_id = patient_data.patient_id
     patient.nist_id = patient_data.id
-
-    # Pulling this data from clinical summary for now, as it is required / reliable
 
     patient.ssn = patient_data.ssn
     patient.last_name = patient_data.last_name
@@ -143,14 +141,14 @@ class PatientController < ApplicationController
     recent_view.save
   end
 
-  def save_to_recent_views(clinical_summary)
+  def save_to_recent_views(clinical_summary, ehr_id)
     if recent_view_exists(clinical_summary)
       update_viewed_date(clinical_summary)
     else
       recent_view = RecentView.new
       recent_view.user_id = current_user.id
 
-      recent_view.clinical_summary_id = ClinicalSummary.find_by_document_id(clinical_summary.id).id
+      recent_view.clinical_summary_id = ClinicalSummary.where(document_id: clinical_summary.id).where(ehr_system_id: ehr_id).first.id
 
       recent_view.save
     end
@@ -182,7 +180,7 @@ class PatientController < ApplicationController
     body = body.to_json
   end
 
-  def clinical_summary_body_json(patient_id)
+  def clinical_summary_body_json(destination_id, destination_name, patient_id)
     body = {
       "Meta": {
         "DataModel": "Clinical Summary",
@@ -190,9 +188,13 @@ class PatientController < ApplicationController
         "EventDateTime": timestamp,
         "Test": true,
         "Destinations": [
+          # {
+          #   "ID": "ef9e7448-7f65-4432-aa96-059647e9b357",
+          #   "Name": "Clinical Summary Endpoint"
+          # }
           {
-            "ID": "ef9e7448-7f65-4432-aa96-059647e9b357",
-            "Name": "Clinical Summary Endpoint"
+            "ID": destination_id,
+            "Name": destination_name
           }
         ]
       },
@@ -210,11 +212,11 @@ class PatientController < ApplicationController
   end
 
   def successful_patient_query?(response)
-    !!response.data["Patient"]
+    successful_response?(response) && !!response.data["Patient"]
   end
   
   def successful_clinical_summary_query?(response)
-    !!response.data["Header"]["Document"]
+    successful_response?(response) && !!response.data["Header"]["Document"]
   end
 
   def successful_response?(response)
