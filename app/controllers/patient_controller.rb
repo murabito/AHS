@@ -72,7 +72,7 @@ class PatientController < ApplicationController
       @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
 
       # save_clinical_summary(@clinical_summary)
-      # save_to_recent_views(@clinical_summary)
+      save_to_recent_views(@clinical_summary, @ehr_system.id)
     else
       flash.alert = "This patient's clinical summary was not successfully returned from this EHR. Please search again."
       render :search
@@ -147,7 +147,7 @@ class PatientController < ApplicationController
   end
 
   def save_to_recent_views(clinical_summary, ehr_id)
-    if recent_view_exists(clinical_summary)
+    if recent_view_exists(clinical_summary, ehr_id)
       update_viewed_date(clinical_summary)
     else
       recent_view = RecentView.new
