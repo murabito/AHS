@@ -16,7 +16,7 @@
         <% @recent_views.each do | recent_view | %>
           <tr>
             <td><input type="checkbox" name=""></td>
-            <td><a href="<%= patient_path(patient_id: recent_view.clinical_summary.patient.nist_id) %>"><%= recent_view.clinical_summary.document_id %></a></td>
+            <td><a href="<%= patient_path(clinical_summary_id: recent_view.clinical_summary.id) %>"><%= recent_view.clinical_summary.document_id %></a></td>
             <td><%= recent_view.clinical_summary.patient.last_name %></td>
             <td><%= recent_view.clinical_summary.patient.first_name %></td>
             <td><%= recent_view.clinical_summary.ehr_system.name %></td>
