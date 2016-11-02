@@ -17,7 +17,7 @@ class PatientController < ApplicationController
         flash.clear
 
         @patient = RedoxApi::Patient.new(response.data["Patient"])
-        save_patient(@patient)
+        save_patient(ehr_system.id, @patient)
       end
 
       clinical_summary_request_body = clinical_summary_body_json(ehr_system.redox_id, ehr_system.name, @patient.id)
@@ -90,8 +90,8 @@ class PatientController < ApplicationController
     redirect_to '/'
   end
 
-  def patient_exists?(patient)
-    !!(Patient.find_by_nist_id(patient.id))
+  def patient_exists?(destination_id, patient)
+    !!(Patient.where(nist_id: patient.id).where(ehr_system_id: destination_id).first)
   end
 
   def clinical_summary_exists?(clinical_summary, ehr_id)
@@ -104,8 +104,8 @@ class PatientController < ApplicationController
     !!(RecentView.where(clinical_summary_id: summary_id).where(user_id: current_user.id).first)
   end
 
-  def save_patient(patient_data)
-    return if patient_exists?(patient_data)
+  def save_patient(destination_id, patient_data)
+    return if patient_exists?(destination_id, patient_data)
     patient = Patient.new
     patient.nist_id = patient_data.id
 
@@ -113,6 +113,7 @@ class PatientController < ApplicationController
     patient.last_name = patient_data.last_name
     patient.dob = patient_data.dob
     patient.first_name = patient_data.first_name
+    patient.ehr_system_id = destination_id
 
     patient.save
   end
