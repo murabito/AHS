@@ -55,9 +55,13 @@ class PatientController < ApplicationController
   end
 
   def show
+    @clinical_summary = ClinicalSummary.find(params["clinical_summary_id"])
+    @patient = @clinical_summary.patient
+    @ehr_system = @clinical_summary.ehr_system
+
     # @patient = Patient.find_by_nist_id(params["patient_id"])
 
-    clinical_summary_request_body = clinical_summary_body_json(params["patient_id"])
+    clinical_summary_request_body = clinical_summary_body_json(@ehr_system.redox_id, @ehr_system.name, @patient.nist_id)
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
 
@@ -68,7 +72,7 @@ class PatientController < ApplicationController
       @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
 
       # save_clinical_summary(@clinical_summary)
-      save_to_recent_views(@clinical_summary)
+      # save_to_recent_views(@clinical_summary)
     else
       flash.alert = "This patient's clinical summary was not successfully returned from this EHR. Please search again."
       render :search
@@ -189,10 +193,6 @@ class PatientController < ApplicationController
         "EventDateTime": timestamp,
         "Test": true,
         "Destinations": [
-          # {
-          #   "ID": "ef9e7448-7f65-4432-aa96-059647e9b357",
-          #   "Name": "Clinical Summary Endpoint"
-          # }
           {
             "ID": destination_id,
             "Name": destination_name
