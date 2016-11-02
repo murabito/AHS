@@ -19,7 +19,7 @@
             <td><a href="<%= patient_path(clinical_summary_id: saved_view.clinical_summary.id) %>"><%= saved_view.clinical_summary.document_id %></a></td>
             <td><%= saved_view.clinical_summary.patient.last_name %></td>
             <td><%= saved_view.clinical_summary.patient.first_name %></td>
-            <td><%= saved_view.clinical_summary.ehr_system.name %></td>
+            <td><%= saved_view.clinical_summary.ehr_system.name  + ' ' + saved_view.clinical_summary.ehr_system.id.to_s %></td>
           </tr>
         <% end %>
       </tbody>
