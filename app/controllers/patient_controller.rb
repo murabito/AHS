@@ -18,6 +18,10 @@ class PatientController < ApplicationController
 
         @patient = RedoxApi::Patient.new(response.data["Patient"])
         save_patient(ehr_system.id, @patient)
+      else
+        flash.alert = "This data did not return a succesful patient query. Please re-enter patient data."
+        redirect_to patient_search_path
+        return
       end
 
       clinical_summary_request_body = clinical_summary_body_json(ehr_system.redox_id, ehr_system.name, @patient.id)
@@ -211,7 +215,7 @@ class PatientController < ApplicationController
   end
 
   def successful_patient_query?(response)
-    successful_response?(response) && !!response.data["Patient"]
+    !!response.data["Patient"]
   end
   
   def successful_clinical_summary_query?(response)
