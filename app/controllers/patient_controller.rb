@@ -18,23 +18,17 @@ class PatientController < ApplicationController
 
         @patient = RedoxApi::Patient.new(response.data["Patient"])
         save_patient(ehr_system.id, @patient)
-      else
-        flash.alert = "This data did not return a succesful patient query. Please re-enter patient data."
-        redirect_to patient_search_path
-        return
-      end
 
-      clinical_summary_request_body = clinical_summary_body_json(ehr_system.redox_id, ehr_system.name, @patient.id)
+        clinical_summary_request_body = clinical_summary_body_json(ehr_system.redox_id, ehr_system.name, @patient.id)
 
-      response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
+        response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
 
-      if successful_clinical_summary_query?(response)
-        # flash.clear
+        if successful_clinical_summary_query?(response)
+          @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
+          # @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
 
-        @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
-        # @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
-
-        save_clinical_summary(@clinical_summary, @patient.id, ehr_system.id)
+          save_clinical_summary(@clinical_summary, @patient.id, ehr_system.id)
+        end
       end
 
     # if successful_response?(response) && successful_patient_query?(response)
@@ -50,12 +44,20 @@ class PatientController < ApplicationController
     # end
     end
 
-    redirect_to search_results_path(patient_id: @patient.id)
+    if !!@patient
+      redirect_to search_results_path(patient_id: @patient.id)
+    else
+      flash.alert = "This data did not return a succesful patient query. Please re-enter patient data."
+      redirect_to patient_search_path
+    end
   end
 
   def search_results
     patient_id = Patient.find_by_nist_id(params["patient_id"]).id
     @clinical_summaries = ClinicalSummary.where(patient_id: patient_id)
+    if !@clinical_summaries
+      redirect_to patient_search_path 
+    end   
   end
 
   def show
@@ -215,7 +217,7 @@ class PatientController < ApplicationController
   end
 
   def successful_patient_query?(response)
-    !!response.data["Patient"]
+    successful_response?(response) && !!response.data["Patient"]
   end
   
   def successful_clinical_summary_query?(response)
