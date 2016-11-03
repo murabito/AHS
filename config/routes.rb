@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get 'patient-search', to: 'patient#search'
   get 'retrieve-patient', to: 'patient#retrieve'
 
+  get 'search-results', to: 'patient#search_results'
   get 'patient', to: 'patient#show', as: :patient
 
   post '/save_view', to: "patient#save_view", as: 'save_view'
