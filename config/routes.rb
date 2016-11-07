@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   devise_for :users
   root 'dashboard#searches'
 
+  get 'verify', to: 'dashboard#verify'
+
   get 'dashboard', to: 'dashboard#searches'
   get 'patient-search', to: 'patient#search'
   get 'retrieve-patient', to: 'patient#retrieve'
