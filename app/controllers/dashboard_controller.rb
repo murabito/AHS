@@ -6,9 +6,7 @@ class DashboardController < ApplicationController
       if verify_token
         # RedoxApi::Core::RequestService.request("POST", "/", headers: {challenge: params["challenge"]})
 
-        request = RedoxApi::Core::RequestService.build_request('POST', '/verify', 
-          :body => { :challenge => params["challenge"] }.to_json,
-          :headers => { 'Content-Type' => 'application/json' } )
+        request = RedoxApi::Core::RequestService.request('POST', '/verify', :headers => { 'Challenge' => params["challenge"] })
 
         redirect_to dashboard_path(challenge: params["challenge"])
       end
