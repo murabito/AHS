@@ -4,7 +4,7 @@ class DashboardController < ApplicationController
   def verify
     if verification_request?
       if verify_token
-        RedoxApi::Core::RequestService.request("POST", "/", body: params["challenge"])
+        RedoxApi::Core::RequestService.request("POST", "/", {headers: params["challenge"], body: params["challenge"]} )
         redirect_to dashboard_path(challenge: params["challenge"])
       end
     end

@@ -45,7 +45,7 @@ module RedoxApi::Core
     end
 
     def self.requires_no_header?(path)
-      !!(path == '/auth/authenticate')
+      !!((path == '/auth/authenticate') || (path == '/verify'))
     end
   end
 end
