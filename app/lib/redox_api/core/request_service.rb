@@ -20,11 +20,13 @@ module RedoxApi::Core
                                        body: body
                                       )
       request.options[:headers] = append_headers(headers, request, body) unless requires_no_header?(path)
+      binding.pry
       request
     end
 
     def self.append_headers(headers, request, body)
       token = access_token
+      binding.pry
       auth_header = { "Authorization" => "Bearer #{token}" }
       default_header = { 'Content-Type' => 'application/json' }
       auth_header.merge(default_header).merge(headers)
