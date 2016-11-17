@@ -16,8 +16,8 @@ class PatientController < ApplicationController
       if successful_patient_query?(response)
         flash.clear
 
-        @patient = RedoxApi::Patient.new(response.data["Patient"])
-        
+        @patient = RedoxApi::Patient.new(response.data["Patients"].first)
+
         save_patient(ehr_system.id, @patient)
       end
 
@@ -109,10 +109,22 @@ class PatientController < ApplicationController
   end
 
   def save_patient(destination_id, patient_data)
-    return if patient_exists?(destination_id, patient_data)
-    patient = Patient.new
-    patient.nist_id = patient_data.id
+    # return if patient_exists?(destination_id, patient_data)
 
+    destination = EhrSystem.find(destination_id)
+
+    patient = Patient.new
+
+    patient_ids = patient_data.id
+
+    mrn = ''
+    patient_ids.each do | identifier |
+      mrn = identifier["ID"] if identifier["IDtype"] == destination.mrn_type
+    end
+
+    # patient.nist_id = patient_data.id
+
+    patient.mrn = mrn
     patient.ssn = patient_data.ssn
     patient.last_name = patient_data.last_name
     patient.dob = patient_data.dob
@@ -230,7 +242,7 @@ class PatientController < ApplicationController
   end
 
   def successful_patient_query?(response)
-    successful_response?(response) && !!response.data["Patient"]
+    successful_response?(response) && !!response.data["Patients"]
   end
   
   def successful_clinical_summary_query?(response)

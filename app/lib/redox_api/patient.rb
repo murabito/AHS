@@ -5,17 +5,19 @@ module RedoxApi
 
     def initialize(data={})
       @data = data
-      @id = patient_id
+      @id = patient_ids
     end
 
-    def patient_id
-      identifiers = @data["Identifiers"]
+    def patient_ids
+      # identifiers = @data["Identifiers"]
+      
+      @data["Identifiers"]
 
-      nist_id = ''
-      identifiers.each do | identifier |
-        nist_id = identifier["ID"] if identifier["IDType"] == 'NIST'
-      end
-      nist_id
+      # nist_id = ''
+      # identifiers.each do | identifier |
+      #   nist_id = identifier["ID"] if identifier["IDType"] == 'NIST'
+      # end
+      # nist_id
     end
     
     def last_name
