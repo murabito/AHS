@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161101202259) do
+ActiveRecord::Schema.define(version: 20161117200032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 20161101202259) do
   end
 
   create_table "patients", force: :cascade do |t|
-    t.string  "nist_id"
+    t.string  "mrn"
     t.string  "dob"
     t.string  "ssn"
     t.string  "last_name"
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 20161101202259) do
   end
 
   add_index "patients", ["ehr_system_id"], name: "index_patients_on_ehr_system_id", using: :btree
-  add_index "patients", ["nist_id"], name: "index_patients_on_nist_id", using: :btree
+  add_index "patients", ["mrn"], name: "index_patients_on_mrn", using: :btree
 
   create_table "recent_views", force: :cascade do |t|
     t.integer  "user_id"

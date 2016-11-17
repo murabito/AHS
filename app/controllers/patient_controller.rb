@@ -11,18 +11,13 @@ class PatientController < ApplicationController
 
       patient_search_request_body = patient_query_body_json(ehr_system.redox_id, ehr_system.name)
 
-      binding.pry
-
-
       response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_search_request_body)
-
-      binding.pry
-
 
       if successful_patient_query?(response)
         flash.clear
 
         @patient = RedoxApi::Patient.new(response.data["Patient"])
+        
         save_patient(ehr_system.id, @patient)
       end
 
