@@ -57,10 +57,10 @@ class PatientController < ApplicationController
   end
 
   def show
-    @clinical_summary = ClinicalSummary.find(params["clinical_summary_id"])
-    @clinical_summary_id = @clinical_summary.id
-    @patient = @clinical_summary.patient
-    @ehr_system = @clinical_summary.ehr_system
+    clinical_summary = ClinicalSummary.find(params["clinical_summary_id"])
+    @clinical_summary_id = clinical_summary.id
+    @patient = clinical_summary.patient
+    @ehr_system = clinical_summary.ehr_system
 
     # @patient = Patient.find_by_nist_id(params["patient_id"])
 
