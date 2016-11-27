@@ -13,6 +13,8 @@ class PatientController < ApplicationController
 
       response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_search_request_body)
 
+      binding.pry
+
       if successful_patient_query?(response)
         flash.clear
 
@@ -167,26 +169,10 @@ class PatientController < ApplicationController
       },
       "Patient": {
         "Demographics": {
-           "FirstName": "Timothy",
-           "MiddleName": "Paul",
            "LastName": "Bixby",
            "DOB": "2008-01-06",
            "SSN": "101-01-0001",
            "Sex": "Male",
-           "Race": "Asian",
-           "MaritalStatus": "Single",
-           "PhoneNumber": {
-              "Home": "+18088675301",
-           },
-           "Language": "en",
-           "Address": {
-              "StreetAddress": "4762 Hickory Street",
-              "City": "Monroe",
-              "State": "WI",
-              "ZIP": "53566",
-              "County": "Green",
-              "Country": "US"
-           }
         }
       }
     }
