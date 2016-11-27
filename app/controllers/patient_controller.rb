@@ -27,22 +27,9 @@ class PatientController < ApplicationController
 
       if successful_clinical_summary_query?(response)
         @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
-        # @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
 
         save_clinical_summary(@clinical_summary, @patient, ehr_system)
       end
-
-    # if successful_response?(response) && successful_patient_query?(response)
-    #   flash.clear
-
-    #   @patient = RedoxApi::Patient.new(response.data["Patient"])
-    #   save_patient(@patient)
-
-    #   redirect_to search_results_path(patient_id: @patient.id)
-    # else
-    #   flash.alert = "This data did not return a succesful patient query. Please re-enter patient data."
-    #   render :search
-    # end
     end
 
     redirect_to search_results_path(patient_id: @patient.id)
@@ -62,11 +49,11 @@ class PatientController < ApplicationController
     @patient = clinical_summary.patient
     @ehr_system = clinical_summary.ehr_system
 
-    # @patient = Patient.find_by_nist_id(params["patient_id"])
-
     clinical_summary_request_body = clinical_summary_body_json(@ehr_system, @patient)
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
+
+    binding.pry
 
     if successful_clinical_summary_query?(response)
       flash.clear
@@ -111,21 +98,11 @@ class PatientController < ApplicationController
   def save_patient(destination_id, patient_data)
     destination = EhrSystem.find(destination_id)
 
+    # return if patient_exists?(destination, mrn)
+
     patient = Patient.new
-
-    patient_ids = patient_data.id
-
-    mrn = ''
-    patient_ids.each do | identifier |
-      mrn = identifier["ID"] if identifier["IDtype"] == destination.mrn_type
-    end
-
-    return if patient_exists?(destination, mrn)
-
-
-    # patient.nist_id = patient_data.id
-
-    patient.mrn = mrn
+    
+    patient.mrn = patient_data.patient_id(destination)
     patient.ssn = patient_data.ssn
     patient.last_name = patient_data.last_name
     patient.dob = patient_data.dob
@@ -133,7 +110,6 @@ class PatientController < ApplicationController
     patient.ehr_system_id = destination_id
 
     patient.save
-    patient
   end
 
   def save_clinical_summary(clinical_summary_data, patient, ehr)
@@ -143,7 +119,6 @@ class PatientController < ApplicationController
 
     clinical_summary.document_id = clinical_summary_data.id
 
-    # TODO - Finds patient by nist id for now.
     clinical_summary.patient_id = Patient.find_by_mrn(patient.mrn).id
 
     clinical_summary.ehr_system_id = ehr.id
@@ -225,7 +200,7 @@ class PatientController < ApplicationController
         "Test": true,
         "Destinations": [
           {
-            "ID": "9652c03c-6e29-4bac-a4cc-1b003d2ab962",
+            "ID": destination.redox_id,
             "Name": destination.name
           }
         ]
