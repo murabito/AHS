@@ -17,6 +17,11 @@
       <%= text_field_tag :dob, nil, placeholder: '2008-01-06' %>
     </div>
 
+    <div>
+      <%= label_tag(:sex, 'Sex') %>
+      <%= select_tag :sex, options_for_select(['Male', 'Female']) %>
+    </div>
+
     <%= submit_tag("Search for Patient", { class: 'button' }) %>
   <% end %>
 </main>
