@@ -9,7 +9,7 @@ class PatientController < ApplicationController
 
     ehr_systems.each do | ehr_system |
 
-      patient_search_request_body = patient_query_body_json(ehr_system.redox_id, ehr_system.name)
+      patient_search_request_body = patient_query_body_json(ehr_system)
 
       response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_search_request_body)
 
@@ -151,7 +151,7 @@ class PatientController < ApplicationController
     end
   end
 
-  def patient_query_body_json(destination_id, destination_name)
+  def patient_query_body_json(destination)
     body = {
       "Meta": {
         "DataModel": "PatientSearch",
@@ -160,8 +160,8 @@ class PatientController < ApplicationController
         "Test": true,
         "Destinations": [
           {
-            "ID": destination_id,
-            "Name": destination_name
+            "ID": destination.redox_id,
+            "Name": destination.name
           }
         ]
       },
