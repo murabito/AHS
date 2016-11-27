@@ -18,7 +18,13 @@ class PatientController < ApplicationController
 
         patient = RedoxApi::Patient.new(response.data["Patients"].first)
 
-        @patient = save_patient(ehr_system.id, patient)
+        patient_mrn = patient.patient_id(ehr_system)
+
+        if patient_exists?(ehr_system, patient_mrn)
+          @patient = Patient.where(mrn: patient_mrn).where(ehr_system_id: ehr_system.id).first
+        else
+          @patient = save_patient(ehr_system.id, patient)
+        end
       end
 
       clinical_summary_request_body = clinical_summary_body_json(ehr_system, @patient)
@@ -36,8 +42,8 @@ class PatientController < ApplicationController
   end
 
   def search_results
-    patient_id = Patient.find(params["patient_id"]).id
-    @clinical_summaries = ClinicalSummary.where(patient_id: patient_id)
+    @patient = Patient.find(params["patient_id"])
+    @clinical_summaries = ClinicalSummary.where(patient_id: @patient.id)
     if !@clinical_summaries
       redirect_to patient_search_path 
     end   
@@ -52,8 +58,6 @@ class PatientController < ApplicationController
     clinical_summary_request_body = clinical_summary_body_json(@ehr_system, @patient)
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
-
-    binding.pry
 
     if successful_clinical_summary_query?(response)
       flash.clear
@@ -98,8 +102,6 @@ class PatientController < ApplicationController
   def save_patient(destination_id, patient_data)
     destination = EhrSystem.find(destination_id)
 
-    # return if patient_exists?(destination, mrn)
-
     patient = Patient.new
     
     patient.mrn = patient_data.patient_id(destination)
@@ -110,6 +112,7 @@ class PatientController < ApplicationController
     patient.ehr_system_id = destination_id
 
     patient.save
+    patient
   end
 
   def save_clinical_summary(clinical_summary_data, patient, ehr)
