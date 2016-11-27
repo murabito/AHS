@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161117201440) do
+ActiveRecord::Schema.define(version: 20161127192633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 20161117201440) do
     t.string  "last_name"
     t.string  "first_name"
     t.integer "ehr_system_id"
+    t.string  "sex"
   end
 
   add_index "patients", ["ehr_system_id"], name: "index_patients_on_ehr_system_id", using: :btree
