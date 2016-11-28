@@ -121,9 +121,7 @@ class PatientController < ApplicationController
     clinical_summary = ClinicalSummary.new
 
     clinical_summary.document_id = clinical_summary_data.id
-
     clinical_summary.patient_id = Patient.find_by_mrn(patient.mrn).id
-
     clinical_summary.ehr_system_id = ehr.id
 
     clinical_summary.save
