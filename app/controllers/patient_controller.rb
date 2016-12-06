@@ -9,61 +9,53 @@ class PatientController < ApplicationController
 
     ehr_systems.each do | ehr_system |
 
-      patient_search_request_body = patient_query_body_json(ehr_system.redox_id, ehr_system.name)
+      patient_search_request_body = patient_query_body_json(ehr_system)
 
       response = RedoxApi::Core::RequestService.request("POST", "/query", body: patient_search_request_body)
 
       if successful_patient_query?(response)
         flash.clear
 
-        @patient = RedoxApi::Patient.new(response.data["Patient"])
-        save_patient(ehr_system.id, @patient)
+        patient = RedoxApi::Patient.new(response.data["Patients"].first)
+
+        patient_mrn = patient.patient_id(ehr_system)
+
+        if patient_exists?(ehr_system, patient_mrn)
+          @patient = Patient.where(mrn: patient_mrn).where(ehr_system_id: ehr_system.id).first
+        else
+          @patient = save_patient(ehr_system.id, patient)
+        end
       end
 
-      clinical_summary_request_body = clinical_summary_body_json(ehr_system.redox_id, ehr_system.name, @patient.id)
+      clinical_summary_request_body = clinical_summary_body_json(ehr_system, @patient)
 
       response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
 
       if successful_clinical_summary_query?(response)
         @clinical_summary = RedoxApi::ClinicalSummary.new(response.data)
-        # @patient = RedoxApi::Patient.new(response.data["Header"]["Patient"])
 
-        save_clinical_summary(@clinical_summary, @patient.id, ehr_system.id)
+        save_clinical_summary(@clinical_summary, @patient, ehr_system)
       end
-
-    # if successful_response?(response) && successful_patient_query?(response)
-    #   flash.clear
-
-    #   @patient = RedoxApi::Patient.new(response.data["Patient"])
-    #   save_patient(@patient)
-
-    #   redirect_to search_results_path(patient_id: @patient.id)
-    # else
-    #   flash.alert = "This data did not return a succesful patient query. Please re-enter patient data."
-    #   render :search
-    # end
     end
 
     redirect_to search_results_path(patient_id: @patient.id)
   end
 
   def search_results
-    patient_id = Patient.find_by_nist_id(params["patient_id"]).id
-    @clinical_summaries = ClinicalSummary.where(patient_id: patient_id)
+    @patient = Patient.find(params["patient_id"])
+    @clinical_summaries = ClinicalSummary.where(patient_id: @patient.id)
     if !@clinical_summaries
       redirect_to patient_search_path 
     end   
   end
 
   def show
-    @clinical_summary = ClinicalSummary.find(params["clinical_summary_id"])
-    @clinical_summary_id = @clinical_summary.id
-    @patient = @clinical_summary.patient
-    @ehr_system = @clinical_summary.ehr_system
+    clinical_summary = ClinicalSummary.find(params["clinical_summary_id"])
+    @clinical_summary_id = clinical_summary.id
+    @patient = clinical_summary.patient
+    @ehr_system = clinical_summary.ehr_system
 
-    # @patient = Patient.find_by_nist_id(params["patient_id"])
-
-    clinical_summary_request_body = clinical_summary_body_json(@ehr_system.redox_id, @ehr_system.name, @patient.nist_id)
+    clinical_summary_request_body = clinical_summary_body_json(@ehr_system, @patient)
 
     response = RedoxApi::Core::RequestService.request("POST", "/query", body: clinical_summary_request_body)
 
@@ -93,8 +85,8 @@ class PatientController < ApplicationController
     redirect_to '/'
   end
 
-  def patient_exists?(destination_id, patient)
-    !!(Patient.where(nist_id: patient.id).where(ehr_system_id: destination_id).first)
+  def patient_exists?(destination, patient_mrn)
+    !!(Patient.where(mrn: patient_mrn).where(ehr_system_id: destination.id).first)
   end
 
   def clinical_summary_exists?(clinical_summary, ehr_id)
@@ -108,10 +100,11 @@ class PatientController < ApplicationController
   end
 
   def save_patient(destination_id, patient_data)
-    return if patient_exists?(destination_id, patient_data)
-    patient = Patient.new
-    patient.nist_id = patient_data.id
+    destination = EhrSystem.find(destination_id)
 
+    patient = Patient.new
+    
+    patient.mrn = patient_data.patient_id(destination)
     patient.ssn = patient_data.ssn
     patient.last_name = patient_data.last_name
     patient.dob = patient_data.dob
@@ -119,19 +112,17 @@ class PatientController < ApplicationController
     patient.ehr_system_id = destination_id
 
     patient.save
+    patient
   end
 
-  def save_clinical_summary(clinical_summary_data, patient_id, ehr_id)
-    return if clinical_summary_exists?(clinical_summary_data, ehr_id)
+  def save_clinical_summary(clinical_summary_data, patient, ehr)
+    return if clinical_summary_exists?(clinical_summary_data, ehr.id)
 
     clinical_summary = ClinicalSummary.new
 
     clinical_summary.document_id = clinical_summary_data.id
-
-    # TODO - Finds patient by nist id for now.
-    clinical_summary.patient_id = Patient.find_by_nist_id(patient_id).id
-
-    clinical_summary.ehr_system_id = ehr_id
+    clinical_summary.patient_id = Patient.find_by_mrn(patient.mrn).id
+    clinical_summary.ehr_system_id = ehr.id
 
     clinical_summary.save
   end
@@ -158,7 +149,7 @@ class PatientController < ApplicationController
     end
   end
 
-  def patient_query_body_json(destination_id, destination_name)
+  def patient_query_body_json(destination)
     body = {
       "Meta": {
         "DataModel": "PatientSearch",
@@ -167,16 +158,17 @@ class PatientController < ApplicationController
         "Test": true,
         "Destinations": [
           {
-            "ID": destination_id,
-            "Name": destination_name
+            "ID": destination.redox_id,
+            "Name": destination.name
           }
         ]
       },
       "Patient": {
         "Demographics": {
-          "LastName": params["last_name"],
-          "DOB": params["dob"],
-          "SSN": params["ssn"],
+           "LastName": params['last_name'],
+           "DOB": params['dob'],
+           "SSN": params['ssn'],
+           "Sex": params['sex'],
         }
       }
     }
@@ -184,7 +176,7 @@ class PatientController < ApplicationController
     body = body.to_json
   end
 
-  def clinical_summary_body_json(destination_id, destination_name, patient_id)
+  def clinical_summary_body_json(destination, patient)
     body = {
       "Meta": {
         "DataModel": "Clinical Summary",
@@ -193,16 +185,16 @@ class PatientController < ApplicationController
         "Test": true,
         "Destinations": [
           {
-            "ID": destination_id,
-            "Name": destination_name
+            "ID": destination.redox_id,
+            "Name": destination.name
           }
         ]
       },
       "Patient": {
         "Identifiers": [
           {
-            "ID": patient_id,
-            "IDType": "NIST"
+            "ID": patient.mrn,
+            "IDType": destination.mrn_type
           }
         ]
       }
@@ -212,7 +204,7 @@ class PatientController < ApplicationController
   end
 
   def successful_patient_query?(response)
-    successful_response?(response) && !!response.data["Patient"]
+    successful_response?(response) && !!response.data["Patients"]
   end
   
   def successful_clinical_summary_query?(response)

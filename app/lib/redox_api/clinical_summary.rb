@@ -66,13 +66,14 @@ module RedoxApi
 
     def email
       email_array = self.data["Header"]["Patient"]["Demographics"]["EmailAddresses"]
-      email_list = email_array.first["Address"]
+
+      email_list = email_array.first["Address"] unless email_array.empty?
 
       if email_array.count > 1
         email_array.each { | address | email_list = email_list + ', ' + address["Address"] }
       end
 
-      email_list
+      email_list || ''
     end
 
     def race

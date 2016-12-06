@@ -57,4 +57,3 @@ group :development, :test do
   # ERD generation for database documentation 
   gem 'railroady'
 end
-
